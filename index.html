@@ -89,6 +89,57 @@
             background: linear-gradient(180deg, #e0f2fe 0%, #bfdbfe 100%);
             border-left: 4px solid #3b82f6;
         }
+
+        /* Premium Restaurant Card Styles */
+        .premium-card {
+            background: linear-gradient(135deg, #d4f4dd 0%, #e8f5e9 50%, #f1f8e9 100%);
+            border: 3px solid #2e7d32;
+            box-shadow: 0 8px 16px rgba(46, 125, 50, 0.3), 0 0 20px rgba(46, 125, 50, 0.1);
+            transform: scale(1.02);
+            position: relative;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .premium-card:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 24px rgba(46, 125, 50, 0.4), 0 0 30px rgba(46, 125, 50, 0.2);
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 2px solid #d6d3d1;
+        }
+
+        .section-divider span {
+            padding: 0 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #78716c;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
     </style>
 </head>
 <body class="text-stone-800 antialiased min-h-screen flex flex-col">
@@ -153,33 +204,53 @@
                     Elegir restaurante para 10 personas con dietas mixtas es complejo. Usa esta herramienta para comparar las tres mejores opciones disponibles cerca del centro.
                 </p>
                 
-                <div class="space-y-3">
+                <div class="space-y-4">
+                    <!-- Premium Option: La Almuzara -->
+                    <button onclick="updateChart('almuzara')" class="premium-card w-full text-left p-5 rounded-xl border transition-all hover:shadow-md group focus:ring-2 focus:ring-green-600">
+                        <span class="premium-badge">ELECCIÓN TOP ⭐</span>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-bold text-xl text-green-900">🌱 Restaurante La Almuzara</span>
+                            <span class="text-xs bg-green-600 text-white px-3 py-1 rounded-full font-bold ml-2">100% Vegetariano</span>
+                        </div>
+                        <p class="text-sm text-stone-700 mt-2 leading-relaxed">
+                            <strong>Perfecto para grupos mixtos</strong> (veganos, vegetarianos y omnívoros)<br>
+                            📍 Calle Marqués del Arco, 3 (centro histórico) • ☎️ +34 921 46 06 22<br>
+                            ⚠️ <strong>Cierra lunes y martes</strong>, pero abierto el domingo
+                        </p>
+                    </button>
+
+                    <!-- Divider -->
+                    <div class="section-divider">
+                        <span>Plan B: Otras Opciones Disponibles</span>
+                    </div>
+
+                    <!-- Alternative Options -->
                     <button onclick="updateChart('casares')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg group-hover:text-red-900">1. Restaurante Casares</span>
-                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Recomendado</span>
+                            <span class="font-bold text-lg group-hover:text-red-900">Restaurante Casares</span>
+                            <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">Alternativa Clásica</span>
                         </div>
                         <p class="text-xs text-stone-500 mt-1">Junto al Acueducto • Menú Vegetariano específico</p>
                     </button>
 
                     <button onclick="updateChart('elsitio')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg group-hover:text-red-900">2. Restaurante El Sitio</span>
+                            <span class="font-bold text-lg group-hover:text-red-900">Restaurante El Sitio</span>
                         </div>
                         <p class="text-xs text-stone-500 mt-1">Cerca de la Catedral • Calidad/Precio • Informal</p>
                     </button>
 
                     <button onclick="updateChart('california')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg group-hover:text-red-900">3. Restaurante California</span>
+                            <span class="font-bold text-lg group-hover:text-red-900">Restaurante California</span>
                         </div>
                         <p class="text-xs text-stone-500 mt-1">Cerca del Acueducto • Variedad Moderna</p>
                     </button>
                 </div>
                 
-                <div id="rest-detail" class="mt-6 p-4 bg-stone-100 rounded-lg text-sm text-stone-700 border-l-4 border-red-800">
-                    <p class="font-bold">💡 Consejo:</p>
-                    <p>Selecciona un restaurante arriba para ver sus detalles y métricas.</p>
+                <div id="rest-detail" class="mt-6 p-4 bg-stone-100 rounded-lg text-sm text-stone-700 border-l-4 border-green-700">
+                    <p class="font-bold">💡 Recomendación del Organizador:</p>
+                    <p>La Almuzara es la opción predilecta para grupos mixtos. Selecciona cualquier restaurante para ver análisis detallado.</p>
                 </div>
             </div>
 
@@ -288,6 +359,11 @@
         ];
 
         const restaurantData = {
+            almuzara: {
+                label: "Restaurante La Almuzara",
+                desc: "<strong>Lo mejor:</strong> 🌱 Cocina 100% vegetariana/vegana en el corazón de Segovia. Ambiente artístico y acogedor. <br><strong>Ideal para:</strong> Grupos con dietas mixtas. Porciones abundantes, opciones sin gluten y menú diario sorpresa. <br><strong>Ubicación:</strong> Calle Marqués del Arco, 3 (centro histórico). <br><strong>☎️ Reservas:</strong> +34 921 46 06 22 <br><strong>⚠️ Horario:</strong> Miércoles a domingo, 12:00-16:00 y 20:00-00:00 (Cierra lunes y martes, pero abierto el domingo del plan)",
+                scores: [4, 5, 5, 3] // Vistas/Ambiente, Opciones Veggie (máximo), Relación Precio (excelente), Tradición (moderna)
+            },
             casares: {
                 label: "Restaurante Casares",
                 desc: "<strong>Lo mejor:</strong> Vistas directas al Acueducto y un Menú Vegetariano explícito. <br>Ideal para grupos mixtos donde se quiere asegurar la paz social.",
@@ -372,7 +448,7 @@
                 labels: ['Vistas/Ambiente', 'Opciones Veggie', 'Relación Precio', 'Tradición'],
                 datasets: [{
                     label: 'Puntuación',
-                    data: restaurantData.casares.scores, // Default
+                    data: restaurantData.almuzara.scores, // Default - La Almuzara
                     fill: true,
                     backgroundColor: 'rgba(127, 29, 29, 0.2)', // Red-900 low alpha
                     borderColor: 'rgb(127, 29, 29)',
