@@ -240,6 +240,24 @@
             <section class="grid md:grid-cols-2 gap-12 pt-8 border-t border-stone-200 dark:border-stone-800" id="logistics">
                 <div>
                     <h3 class="text-xl font-bold font-serif mb-6 text-stone-900 dark:text-white">Checklist Pre-Viaje</h3>
+                    
+                    <!-- Add Task Form -->
+                    <div class="mb-4 flex gap-2">
+                        <input 
+                            type="text" 
+                            id="new-task-input" 
+                            placeholder="Añadir nueva tarea..." 
+                            class="flex-grow px-4 py-2 rounded-lg border-2 border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white focus:border-primary focus:outline-none transition-colors"
+                        />
+                        <button 
+                            id="add-task-btn"
+                            class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-semibold transition-colors flex items-center gap-2 shadow-sm"
+                        >
+                            <span class="material-symbols-outlined text-lg">add</span>
+                            <span class="hidden sm:inline">Añadir</span>
+                        </button>
+                    </div>
+                    
                     <div class="flex flex-col gap-4" id="checklist-container">
                         <!-- Checklist items injected by JS -->
                     </div>
@@ -333,49 +351,56 @@
                 title: "Salida desde la Sierra",
                 icon: "directions_car",
                 desc: "Inicio del viaje hacia Segovia.",
-                details: "Punto de encuentro y salida desde la Sierra. Aseguraos de llevar todo lo necesario: paraguas, calzado cómodo y buen ánimo. <br><br><em>Tiempo estimado de viaje: aproximadamente 1 hora hasta Segovia.</em>"
+                details: "Punto de encuentro y salida desde la Sierra. Aseguraos de llevar todo lo necesario: paraguas, calzado cómodo y buen ánimo. <br><br><em>Tiempo estimado de viaje: aproximadamente 1 hora hasta Segovia.</em>",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Guadarrama+Madrid"
             },
             {
                 time: "10:30",
                 title: "Llegada y Parking",
                 icon: "local_parking",
                 desc: "Objetivo: Aparcar a cubierto. Evitar vueltas innecesarias.",
-                details: "Dirigíos al <strong>Parking Acueducto (Oriental)</strong> o al de la Estación de Autobuses. Están a pie del Acueducto y son cubiertos. <br><br><em>Tip: No intentéis aparcar en la calle, con lluvia y siendo 10 es perder el tiempo.</em>"
+                details: "Dirigíos al <strong>Parking Acueducto (Oriental)</strong> o al de la Estación de Autobuses. Están a pie del Acueducto y son cubiertos. <br><br><em>Tip: No intentéis aparcar en la calle, con lluvia y siendo 10 es perder el tiempo.</em>",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Parking+Acueducto+Oriental+Segovia"
             },
             {
                 time: "11:00",
                 title: "Foto y Subida",
                 icon: "photo_camera",
                 desc: "La foto obligatoria y caminata.",
-                details: "Foto rápida en la Plaza del Azoguejo con el Acueducto de fondo (y los paraguas). Subid inmediatamente por la Calle Real hacia el Alcázar (20 min andando). Es un paseo bonito pero mejor hacerlo rápido para llegar al refugio del Alcázar."
+                details: "Foto rápida en la Plaza del Azoguejo con el Acueducto de fondo (y los paraguas). Subid inmediatamente por la Calle Real hacia el Alcázar (20 min andando). Es un paseo bonito pero mejor hacerlo rápido para llegar al refugio del Alcázar.",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Plaza+del+Azoguejo+Acueducto+Segovia"
             },
             {
                 time: "11:30",
                 title: "El Alcázar",
                 icon: "fort",
                 desc: "Refugio monumental (Interior).",
-                details: "<strong>IMPORTANTE:</strong> Entradas compradas ONLINE previamente. <br>Visita: Sala de los Reyes, Trono y Museo de Artillería. <br><em>Advertencia:</em> Si llueve mucho, no subáis a la Torre de Juan II (152 escalones y vistas mojadas/nulas)."
+                details: "<strong>IMPORTANTE:</strong> Entradas compradas ONLINE previamente. <br>Visita: Sala de los Reyes, Trono y Museo de Artillería. <br><em>Advertencia:</em> Si llueve mucho, no subáis a la Torre de Juan II (152 escalones y vistas mojadas/nulas).",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Alcazar+de+Segovia"
             },
             {
                 time: "14:00",
                 title: "Comida",
                 icon: "restaurant",
                 desc: "Reserva confirmada (Vital).",
-                details: "Hora crítica. Dirigíos al restaurante reservado. <br>Objetivo: Disfrutar del cochinillo y asegurar que los vegetarianos tengan sus platos especiales listos. Sobremesa tranquila hasta que escampe un poco."
+                details: "Hora crítica. Dirigíos al restaurante reservado. <br>Objetivo: Disfrutar del cochinillo y asegurar que los vegetarianos tengan sus platos especiales listos. Sobremesa tranquila hasta que escampe un poco.",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=La+Almuzara+Calle+Marques+del+Arco+3+Segovia"
             },
             {
                 time: "16:00",
                 title: "Catedral",
                 icon: "church",
                 desc: "La Dama de las Catedrales.",
-                details: "Visita perfecta para la tarde (por la mañana hay culto). Es inmensa y luminosa, ideal para bajar la comida caminando a cubierto. Abre a turismo sobre las 13:00, así que a las 16:00 está perfecta."
+                details: "Visita perfecta para la tarde (por la mañana hay culto). Es inmensa y luminosa, ideal para bajar la comida caminando a cubierto. Abre a turismo sobre las 13:00, así que a las 16:00 está perfecta.",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Catedral+de+Segovia"
             },
             {
                 time: "17:30",
                 title: "Postre y Regreso",
                 icon: "directions_car",
                 desc: "Ponche y Coche.",
-                details: "Parad en <strong>Pastelería Limón y Menta</strong> a por Ponche Segoviano. Si queréis café: La Colonial en Calle Real. <br><strong>18:30:</strong> Salida hacia casa para evitar el tráfico de las 20:00."
+                details: "Parad en <strong>Pastelería Limón y Menta</strong> a por Ponche Segoviano. Si queréis café: La Colonial en Calle Real. <br><strong>18:30:</strong> Salida hacia casa para evitar el tráfico de las 20:00.",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Pasteleria+Limon+y+Menta+Segovia"
             }
         ];
 
@@ -490,9 +515,14 @@
                             </div>
                         </div>
                         <div class="bg-white dark:bg-stone-950 p-6 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm">
-                            <p class="text-stone-700 dark:text-stone-300 text-lg leading-relaxed">
+                            <p class="text-stone-700 dark:text-stone-300 text-lg leading-relaxed mb-4">
                                 ${data.details}
                             </p>
+                            <a href="${data.mapsUrl}" target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm mt-4">
+                                <span class="material-symbols-outlined text-lg mr-2">location_on</span>
+                                Ver en Mapa
+                            </a>
                         </div>
                     </div>
                 `;
@@ -645,42 +675,126 @@
         }
 
         // --- Logic: Checklist ---
-        function initChecklist() {
-            const container = document.getElementById('checklist-container');
-            checklistItems.forEach((item, i) => {
-                const label = document.createElement('label');
-                label.className = "group flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white dark:hover:bg-stone-900 transition-colors";
-                label.innerHTML = `
-                    <input type="checkbox" id="task-${i}" class="peer sr-only">
-                    <div class="w-6 h-6 rounded-full border-2 border-stone-300 dark:border-stone-600 peer-checked:bg-primary peer-checked:border-primary transition-all relative flex items-center justify-center">
-                        <span class="material-symbols-outlined text-white text-[16px] opacity-0 peer-checked:opacity-100">check</span>
-                    </div>
-                    <span class="text-stone-600 dark:text-stone-300 peer-checked:text-stone-400 peer-checked:line-through transition-colors flex-grow">${item}</span>
-                `;
+        let customTasks = [];
+        
+        // Load custom tasks from localStorage
+        function loadCustomTasks() {
+            const saved = localStorage.getItem('segoviaCustomTasks');
+            if (saved) {
+                try {
+                    customTasks = JSON.parse(saved);
+                } catch (e) {
+                    customTasks = [];
+                }
+            }
+        }
+        
+        // Save custom tasks to localStorage
+        function saveCustomTasks() {
+            localStorage.setItem('segoviaCustomTasks', JSON.stringify(customTasks));
+        }
+        
+        // Create a single task element
+        function createTaskElement(item, index, isCustom = false) {
+            const label = document.createElement('label');
+            label.className = "group flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white dark:hover:bg-stone-900 transition-colors";
+            label.innerHTML = `
+                <input type="checkbox" id="task-${isCustom ? 'custom-' : ''}${index}" class="peer sr-only">
+                <div class="w-6 h-6 rounded-full border-2 border-stone-300 dark:border-stone-600 peer-checked:bg-primary peer-checked:border-primary transition-all relative flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-[16px] opacity-0 peer-checked:opacity-100">check</span>
+                </div>
+                <span class="text-stone-600 dark:text-stone-300 peer-checked:text-stone-400 peer-checked:line-through transition-colors flex-grow">${item}</span>
+                ${isCustom ? '<button class="delete-task-btn opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded" data-index="' + index + '"><span class="material-symbols-outlined text-red-600 dark:text-red-400 text-[18px]">delete</span></button>' : ''}
+            `;
+            
+            const checkbox = label.querySelector('input');
+            const textSpan = label.querySelector('span:nth-child(3)');
+            const iconDiv = label.querySelector('div');
+            
+            // Checkbox toggle
+            label.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                    return; // Don't toggle checkbox when clicking delete button
+                }
+                if (e.target.tagName !== 'INPUT') {
+                    checkbox.checked = !checkbox.checked;
+                }
                 
-                const checkbox = label.querySelector('input');
-                const textSpan = label.querySelector('span:last-child');
-                const iconDiv = label.querySelector('div');
-                
-                label.addEventListener('click', (e) => {
-                    if (e.target.tagName !== 'INPUT') {
-                        checkbox.checked = !checkbox.checked;
-                    }
-                    
-                    if(checkbox.checked) {
-                        textSpan.classList.add('line-through', 'text-stone-400');
-                        iconDiv.classList.add('bg-primary', 'border-primary');
-                        iconDiv.querySelector('.material-symbols-outlined').classList.remove('opacity-0');
-                        iconDiv.querySelector('.material-symbols-outlined').classList.add('opacity-100');
-                    } else {
-                        textSpan.classList.remove('line-through', 'text-stone-400');
-                        iconDiv.classList.remove('bg-primary', 'border-primary');
-                        iconDiv.querySelector('.material-symbols-outlined').classList.remove('opacity-100');
-                        iconDiv.querySelector('.material-symbols-outlined').classList.add('opacity-0');
-                    }
+                if(checkbox.checked) {
+                    textSpan.classList.add('line-through', 'text-stone-400');
+                    iconDiv.classList.add('bg-primary', 'border-primary');
+                    iconDiv.querySelector('.material-symbols-outlined').classList.remove('opacity-0');
+                    iconDiv.querySelector('.material-symbols-outlined').classList.add('opacity-100');
+                } else {
+                    textSpan.classList.remove('line-through', 'text-stone-400');
+                    iconDiv.classList.remove('bg-primary', 'border-primary');
+                    iconDiv.querySelector('.material-symbols-outlined').classList.remove('opacity-100');
+                    iconDiv.querySelector('.material-symbols-outlined').classList.add('opacity-0');
+                }
+            });
+            
+            // Delete button for custom tasks
+            if (isCustom) {
+                const deleteBtn = label.querySelector('.delete-task-btn');
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteCustomTask(index);
                 });
-
-                container.appendChild(label);
+            }
+            
+            return label;
+        }
+        
+        // Render all tasks
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = '';
+            
+            // Add default tasks
+            checklistItems.forEach((item, i) => {
+                container.appendChild(createTaskElement(item, i, false));
+            });
+            
+            // Add custom tasks
+            customTasks.forEach((item, i) => {
+                container.appendChild(createTaskElement(item, i, true));
+            });
+        }
+        
+        // Add new custom task
+        function addCustomTask() {
+            const input = document.getElementById('new-task-input');
+            const taskText = input.value.trim();
+            
+            if (taskText) {
+                customTasks.push(taskText);
+                saveCustomTasks();
+                renderChecklist();
+                input.value = '';
+                input.focus();
+            }
+        }
+        
+        // Delete custom task
+        function deleteCustomTask(index) {
+            customTasks.splice(index, 1);
+            saveCustomTasks();
+            renderChecklist();
+        }
+        
+        function initChecklist() {
+            loadCustomTasks();
+            renderChecklist();
+            
+            // Add event listeners
+            const addBtn = document.getElementById('add-task-btn');
+            const input = document.getElementById('new-task-input');
+            
+            addBtn.addEventListener('click', addCustomTask);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addCustomTask();
+                }
             });
         }
 
