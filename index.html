@@ -1,159 +1,57 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="light" lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Segovia: Plan de Lluvia - Domingo 1 Feb</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Segovia: CumpleFunny - Domingo 1 Feb</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chosen Palette: Warm Neutrals (Stone/Sand) for background, Deep Red (Segovia/Brick) for accents, Muted Blue for rain context. -->
     
-    <!-- Application Structure Plan: 
-         1. Hero Section: Sets the context (Date, Weather, Group Size) immediately.
-         2. Interactive Timeline (The Core): Instead of a long text list, a clickable timeline lets users focus on specific time blocks. This prevents information overload.
-         3. Gastronomy Analytics: A dedicated section to solve the "where to eat" problem. Uses a Radar Chart to compare the 3 restaurant options based on 'Vegetarian Options', 'Views', 'Price', and 'Tradition', helping the group make a data-driven decision.
-         4. Logistics & Checklist: A functional footer area with actionable items (parking info and an interactive toggle checklist).
-         Rationale: The structure prioritizes the flow of the day (Time) and the hardest decision (Food), keeping logistics handy but secondary.
-    -->
-
-    <!-- Visualization & Content Choices:
-         1. Timeline: Goal -> Organize the day. Method -> Horizontal flex buttons triggering DOM updates. Justification -> Interactive flow is better than scrolling text for a schedule.
-         2. Restaurant Radar Chart: Goal -> Compare qualitative restaurant attributes (Vibe, Veggie-friendliness). Method -> Chart.js Radar Chart. Interaction -> Clicking buttons updates the chart dataset. Justification -> Visualizes the trade-offs between "Traditional" and "Modern/Veggie" options clearly.
-         3. Checklist: Goal -> Task management. Method -> JS Event Listeners on checkboxes. Justification -> Functional utility for the organizer.
-         4. Weather Indicator: Goal -> Reminder of constraints. Method -> CSS/Unicode icons. Justification -> Simple visual reinforcement of the "Rain" constraint.
-    -->
-
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap');
-        
-        :root {
-            --city-dark: #1f2937;      /* Gris oscuro ciudad */
-            --city-medium: #374151;     /* Gris medio */
-            --city-light: #6b7280;      /* Gris claro */
-            --field-dark: #14532d;      /* Verde oscuro campo */
-            --field-medium: #16a34a;    /* Verde medio */
-            --field-light: #22c55e;     /* Verde claro */
-            --accent-gold: #ca8a04;     /* Dorado Segovia */
-            --rain-blue: #0284c7;       /* Azul lluvia */
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#17a14e",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#112117",
+                        "stone-light": "#e8e8e3",
+                        "stone-dark": "#2d2d2a",
+                        "steel": "#4b5563",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
         }
+    </script>
+    
+    <style>
         
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 25%, #c7d2c7 50%, #d1d5db 75%, #e5e7eb 100%);
-            background-attachment: fixed;
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
         }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
         }
-
-        /* Patrón decorativo ciudad-campo */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.04;
-            z-index: -1;
-            background-image: 
-                repeating-linear-gradient(90deg, transparent, transparent 40px, var(--city-dark) 40px, var(--city-dark) 42px),
-                repeating-linear-gradient(0deg, transparent, transparent 40px, var(--field-dark) 40px, var(--field-dark) 42px);
-            pointer-events: none;
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
-        /* Animaciones CSS */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(-40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 25px rgba(202, 138, 4, 0.4), 0 0 50px rgba(202, 138, 4, 0.2); }
-            50% { box-shadow: 0 0 35px rgba(202, 138, 4, 0.6), 0 0 70px rgba(202, 138, 4, 0.3); }
-        }
-
-        @keyframes backgroundPan {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        main > section, main > header {
-            animation: fadeInUp 0.8s ease-out forwards;
-            animation-delay: calc(var(--animation-order, 0) * 0.15s);
-        }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px) saturate(200%);
-            border: 1.5px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 
-                0 10px 40px rgba(31, 41, 55, 0.12),
-                0 3px 12px rgba(20, 83, 45, 0.08),
-                inset 0 1px 1px rgba(255, 255, 255, 1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .glass-panel:hover {
-            transform: translateY(-4px);
-            box-shadow: 
-                0 15px 60px rgba(31, 41, 55, 0.18),
-                0 5px 20px rgba(20, 83, 45, 0.12),
-                inset 0 1px 1px rgba(255, 255, 255, 1);
-        }
-
-        /* Hero con imagen de fondo */
-        .hero-section {
-            background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(20, 83, 45, 0.92) 100%),
-                        url('https://images.unsplash.com/photo-1583207570852-267e52348ac3?w=1200&q=80') center/cover;
-            animation: backgroundPan 30s ease infinite alternate;
-            background-size: 200% 100%;
-        }
-
-        .timeline-connector {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 100%;
-            height: 2rem;
-            width: 3px;
-            background: linear-gradient(180deg, var(--field-medium) 0%, transparent 100%);
-            z-index: 0;
-        }
-
+        
         .chart-container {
             position: relative;
             width: 100%;
@@ -169,348 +67,258 @@
                 height: 320px;
             }
         }
-
-        .active-tab {
-            background: linear-gradient(135deg, var(--field-dark) 0%, var(--field-medium) 100%);
+        
+        .active-timeline-btn {
+            background: #17a14e;
             color: white;
-            border-color: var(--field-dark);
-            box-shadow: 0 6px 20px rgba(20, 83, 45, 0.4), 0 3px 6px rgba(0, 0, 0, 0.15);
-            transform: scale(1.08) translateY(-2px);
+            border-color: #17a14e;
+            box-shadow: 0 6px 20px rgba(23, 161, 78, 0.2);
         }
-
-        .inactive-tab {
+        
+        .inactive-timeline-btn {
             background: white;
-            color: var(--city-dark);
-            border: 2px solid var(--city-light);
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
         }
-
-        .inactive-tab:hover {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            color: var(--field-dark);
-            border-color: var(--field-medium);
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+        
+        .inactive-timeline-btn:hover {
+            border-color: rgba(23, 161, 78, 0.5);
+            color: #17a14e;
         }
-
-        .weather-rain {
-            background: linear-gradient(135deg, #bae6fd 0%, #7dd3fc 50%, #38bdf8 100%),
-                        url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=600&q=80') center/cover;
-            background-blend-mode: overlay;
-            border-left: 5px solid var(--rain-blue);
-            position: relative;
-            overflow: hidden;
+        
+        .restaurant-card-selected {
+            border-left-color: #17a14e !important;
+            border-left-width: 4px;
+            opacity: 1;
         }
-
-        .weather-rain::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255, 255, 255, 0.4) 50%,
-                transparent 70%
-            );
-            animation: shimmer 4s infinite;
+        
+        .restaurant-card-unselected {
+            border-left-color: transparent;
+            border-left-width: 4px;
+            opacity: 0.7;
         }
-
-        /* Títulos con estilo ciudad-campo */
-        h1 {
-            font-family: 'Playfair Display', serif;
-        }
-
-        h2 {
-            font-family: 'Playfair Display', serif;
-            background: linear-gradient(135deg, var(--city-dark) 0%, var(--field-dark) 50%, var(--city-medium) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-        }
-
-        h3 {
-            font-weight: 800;
-        }
-
-        /* Badge brillante para PRINCIPAL */
-        .badge-principal {
-            animation: pulse-glow 2.5s infinite;
-            background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%);
-        }
-
-        /* Mejorar espaciado en móvil */
-        @media (max-width: 768px) {
-            main {
-                padding: 1rem;
-            }
-            
-            main > section {
-                margin-bottom: 2.5rem;
-            }
-
-            h2 {
-                font-size: 1.75rem;
-                margin-bottom: 1.25rem;
-            }
-        }
-
-        /* Efectos hover mejorados para botones de restaurante */
-        .restaurant-btn {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .restaurant-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.3), transparent);
-            transition: left 0.6s;
-        }
-
-        .restaurant-btn:hover::before {
-            left: 100%;
-        }
-
-        .restaurant-btn:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 15px 40px rgba(20, 83, 45, 0.3);
-        }
-
-        /* Sombras con color ciudad-campo */
-        .shadow-city {
-            box-shadow: 0 12px 48px rgba(31, 41, 55, 0.25), 0 5px 16px rgba(55, 65, 81, 0.2);
-        }
-
-        .shadow-field {
-            box-shadow: 0 12px 48px rgba(20, 83, 45, 0.25), 0 5px 16px rgba(22, 163, 74, 0.2);
-        }
-
-        .shadow-gold {
-            box-shadow: 0 12px 48px rgba(202, 138, 4, 0.3), 0 5px 16px rgba(251, 191, 36, 0.25);
-        }
-
-        /* Iconos flotantes */
-        .float-icon {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* Imagen decorativa para timeline */
-        .timeline-bg {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.85) 100%),
-                        url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=800&q=80') center/cover;
-            background-blend-mode: overlay;
-        }
-
-        /* Imagen decorativa para restaurantes */
-        .restaurant-bg {
-            background: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80') center/cover;
-            background-blend-mode: overlay;
+        
+        .restaurant-card-unselected:hover {
+            border-left-color: #d1d5db;
+            opacity: 1;
         }
     </style>
 </head>
-<body class="text-stone-800 antialiased min-h-screen flex flex-col">
+<body class="bg-background-light dark:bg-background-dark text-stone-dark dark:text-stone-light min-h-screen flex flex-col">
 
     <!-- Navbar -->
-    <nav class="bg-gradient-to-r from-gray-900 via-gray-800 to-green-900 text-white p-4 md:p-5 sticky top-0 z-50 shadow-city backdrop-blur-sm bg-opacity-95">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-lg md:text-xl font-bold tracking-tight" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #ca8a04 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🏰 Segovia: Operación Domingo Lluvioso</h1>
-            <span class="text-xs md:text-sm bg-gradient-to-r from-yellow-600 to-yellow-500 px-3 py-1.5 rounded-full text-gray-900 font-bold shadow-gold">10 PAX | 1 FEB</span>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="flex-grow w-full max-w-4xl mx-auto p-4 md:p-6 space-y-10 md:space-y-14">
-
-        <!-- Context & Hero -->
-        <header class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6" style="--animation-order: 0;">
-            <div class="md:col-span-2 hero-section rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-city border-2 border-gray-700">
-                <div class="absolute top-0 right-0 p-6 opacity-20 text-8xl md:text-9xl select-none float-icon">🌧️</div>
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" style="background: linear-gradient(135deg, #ffffff 0%, #d1fae5 50%, #a7f3d0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Resumen de la Misión</h2>
-                <p class="text-gray-100 mb-6 text-base md:text-lg leading-relaxed font-medium">
-                    Un plan optimizado para 10 amigos en un día de lluvia. El objetivo es minimizar el tiempo a la intemperie, asegurar la comida para todos (vegetarianos incluidos) y disfrutar de los interiores monumentales de Segovia.
-                </p>
-                <div class="flex flex-wrap gap-3">
-                    <span class="px-4 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full text-sm font-bold shadow-lg backdrop-blur-sm">☔ Lluvia Ligera (3-9°C)</span>
-                    <span class="px-4 py-2.5 bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-full text-sm font-bold shadow-lg backdrop-blur-sm">🍖 Gastronomía</span>
-                    <span class="px-4 py-2.5 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-full text-sm font-bold shadow-lg backdrop-blur-sm">🏛️ Interiores</span>
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#112117]/80 backdrop-blur-md border-b border-stone-200 dark:border-stone-800">
+        <div class="layout-container flex h-full flex-col max-w-[960px] mx-auto">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary text-2xl">castle</span>
+                    <h2 class="text-xl font-bold tracking-tight text-stone-900 dark:text-white font-serif">Segovia 2024</h2>
                 </div>
-            </div>
-            
-            <div class="glass-panel rounded-3xl p-6 md:p-8 flex flex-col justify-center items-center text-center weather-rain shadow-field border-2 border-sky-300">
-                <div class="text-6xl mb-4 float-icon">🚗</div>
-                <h3 class="font-bold text-xl md:text-2xl mb-3 text-blue-900">Aparcamiento</h3>
-                <p class="text-sm md:text-base text-gray-800 font-semibold">Directos al <span class="text-blue-900 font-bold">Parking Acueducto</span> (Oriental) o Estación de Autobuses.</p>
-                <p class="text-xs md:text-sm text-red-800 mt-3 font-bold bg-red-100 px-4 py-2 rounded-full border-2 border-red-300">⚠️ ¡NO aparcar en calle!</p>
-            </div>
-        </header>
-
-        <!-- Interactive Timeline Section -->
-        <section style="--animation-order: 1;">
-            <div class="mb-6">
-                <h2 class="text-3xl md:text-5xl font-bold mb-3">⏱️ Cronología del Día</h2>
-                <p class="text-gray-700 text-base md:text-lg font-semibold">Navega por las horas para ver los detalles estratégicos de cada etapa.</p>
-            </div>
-
-            <!-- Timeline Navigation -->
-            <div class="flex overflow-x-auto pb-4 gap-3 no-scrollbar" id="timeline-nav" style="scrollbar-width: none; -ms-overflow-style: none;">
-                <!-- Buttons injected by JS -->
-            </div>
-
-            <!-- Dynamic Content Area -->
-            <div id="timeline-content" class="timeline-bg rounded-3xl p-6 md:p-10 mt-4 transition-all duration-500 ease-in-out border-l-8 border-green-700 shadow-field">
-                <!-- Content injected by JS -->
-            </div>
-        </section>
-
-        <!-- Gastronomy Analytics Section -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-start" style="--animation-order: 2;">
-            <div>
-                <h2 class="text-3xl md:text-5xl font-bold mb-4">🍽️ Decisión Gastronómica</h2>
-                <p class="text-gray-700 text-base md:text-lg mb-8 leading-relaxed font-medium">
-                    Elegir restaurante para 10 personas con dietas mixtas es complejo. Usa esta herramienta para comparar las mejores opciones disponibles cerca del centro.
-                </p>
-                
-                <!-- Restaurante Principal Destacado -->
-                <div class="mb-8 relative">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-yellow-600 via-amber-600 to-yellow-700 rounded-3xl blur-lg opacity-40"></div>
-                    <button onclick="updateChart('almuzara')" class="restaurant-btn relative w-full text-left p-6 md:p-8 rounded-3xl border-3 bg-gradient-to-br from-gray-900 via-green-900 to-gray-800 text-white border-green-700 group focus:ring-4 focus:ring-yellow-500 shadow-gold">
-                        <div class="absolute inset-0 restaurant-bg rounded-3xl opacity-20"></div>
-                        <div class="relative z-10">
-                            <div class="flex justify-between items-start mb-4">
-                                <span class="font-bold text-2xl md:text-3xl">⭐ La Almuzara</span>
-                                <span class="badge-principal text-xs md:text-sm px-4 py-2 rounded-full text-gray-900 font-extrabold shadow-lg">PRINCIPAL</span>
-                            </div>
-                            <p class="text-base md:text-lg text-green-100 mb-2 font-semibold">📍 Calle Marqués del Arco, 3 - Segovia</p>
-                            <p class="text-sm md:text-base text-gray-200 font-medium">Cocina tradicional castellana • Platos de cuchara • Menús especiales disponibles</p>
-                        </div>
-                    </button>
-                </div>
-
-                <!-- Opciones Secundarias -->
-                <div class="border-t-2 border-gray-300 pt-6 mb-5">
-                    <p class="text-sm text-gray-600 uppercase tracking-wider font-bold mb-4 flex items-center">
-                        <span class="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
-                        Opciones Alternativas
-                    </p>
-                </div>
-                
-                <div class="space-y-4">
-                    <button onclick="updateChart('casares')" class="restaurant-btn w-full text-left p-5 md:p-6 rounded-2xl border-2 bg-white border-gray-300 hover:border-green-600 group focus:ring-2 focus:ring-green-500 shadow-md">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg md:text-xl group-hover:text-green-800 transition-colors">Restaurante Casares</span>
-                        </div>
-                        <p class="text-sm md:text-base text-gray-600 mt-2 font-medium">Junto al Acueducto • Menú Vegetariano específico</p>
-                    </button>
-
-                    <button onclick="updateChart('elsitio')" class="restaurant-btn w-full text-left p-5 md:p-6 rounded-2xl border-2 bg-white border-gray-300 hover:border-green-600 group focus:ring-2 focus:ring-green-500 shadow-md">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg md:text-xl group-hover:text-green-800 transition-colors">Restaurante El Sitio</span>
-                        </div>
-                        <p class="text-sm md:text-base text-gray-600 mt-2 font-medium">Cerca de la Catedral • Calidad/Precio • Informal</p>
-                    </button>
-
-                    <button onclick="updateChart('california')" class="restaurant-btn w-full text-left p-5 md:p-6 rounded-2xl border-2 bg-white border-gray-300 hover:border-green-600 group focus:ring-2 focus:ring-green-500 shadow-md">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg md:text-xl group-hover:text-green-800 transition-colors">Restaurante California</span>
-                        </div>
-                        <p class="text-sm md:text-base text-gray-600 mt-2 font-medium">Cerca del Acueducto • Variedad Moderna</p>
-                    </button>
-                </div>
-                
-                <div id="rest-detail" class="mt-8 p-6 md:p-7 bg-gradient-to-br from-green-50 to-gray-50 rounded-2xl text-sm md:text-base text-gray-800 border-l-4 border-green-700 shadow-field">
-                    <h4 class="font-bold text-lg text-stone-900 mb-2">La Almuzara ⭐</h4>
-                    <p class="mb-4"><strong>Restaurante Principal - Calle Marqués del Arco, 3</strong><br><strong>Lo mejor:</strong> Auténtica cocina tradicional castellana en pleno centro histórico de Segovia. Especialistas en asados y platos de cuchara típicos segovianos. <br>Ambiente acogedor y familiar, perfecto para grupos. Excelente relación calidad-precio con productos de la tierra. Opción ideal para experimentar la gastronomía local en un entorno tradicional.</p>
-                    <div class="flex flex-wrap gap-2 pt-3 border-t border-stone-300">
-                        <a href="https://www.google.com/maps/search/?api=1&query=La+Almuzara+Calle+Marques+del+Arco+3+Segovia" target="_blank" rel="noopener noreferrer" 
-                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                            </svg>
-                            Ver en Mapa
-                        </a>
-                        <a href="https://www.google.com/search?q=La+Almuzara+Segovia+menu" target="_blank" rel="noopener noreferrer" 
-                           class="inline-flex items-center px-4 py-2 bg-red-800 hover:bg-red-900 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Ver Menú
-                        </a>
+                <nav class="hidden md:flex gap-8">
+                    <a class="text-sm font-medium text-stone-600 hover:text-primary dark:text-stone-300 transition-colors" href="#itinerary">Itinerario</a>
+                    <a class="text-sm font-medium text-stone-600 hover:text-primary dark:text-stone-300 transition-colors" href="#dining">Gastronomía</a>
+                    <a class="text-sm font-medium text-stone-600 hover:text-primary dark:text-stone-300 transition-colors" href="#logistics">Logística</a>
+                </nav>
+                <div class="flex items-center">
+                    <div class="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider border border-primary/20">
+                        1 FEB
                     </div>
                 </div>
             </div>
+        </div>
+    </header>
 
-            <div class="glass-panel p-6 md:p-10 rounded-3xl flex flex-col items-center justify-center shadow-city border-2 border-gray-200">
-                <h3 class="text-sm md:text-lg font-bold text-gray-600 uppercase tracking-widest mb-6">Análisis Comparativo</h3>
-                <div class="chart-container">
-                    <canvas id="restaurantChart"></canvas>
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-stone-900/30 backdrop-blur-[2px] z-10"></div>
+                <img alt="Vista panorámica del Acueducto de Segovia bajo un cielo nublado" class="w-full h-full object-cover grayscale-[30%]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEgWlc4h2D9TuWKKob5HSFhtMq8CCyz0toNIqJrLeEiIrTBu7VLsTd3eLXKaU2ktuT2h2jRS5IUbUZ26dbbQlDuFQDNw_HVX0MW1FZs7PCwYtuUVxvJvnTinoTG3ZR4m7AYwh2BIZhmfYMQn-n6mXJ_vYklF5-hpY1fVqFkHdNsQj0BQlgOhG_7LXkTaFeqlwqvqg0JIWgCN2Y_VSyMZjwA7s2jT5zJINQiLub4Zo86PYpGF1f0rnVxNbw94gxUkH0vcC3mvpRh2E"/>
+            </div>
+            <div class="relative z-20 max-w-[960px] w-full px-6 flex flex-col md:flex-row items-end justify-between gap-8 pb-12 h-full">
+                <div class="flex flex-col gap-4 max-w-2xl mb-12">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full border border-white/10 w-fit">
+                        <span class="material-symbols-outlined text-white text-sm">rainy</span>
+                        <span class="text-white text-xs font-medium tracking-wide">Lluvia Ligera, 3-9°C</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight">
+                        Arquitectura <br/> <span class="text-primary italic font-serif">&amp; Gastronomía</span>
+                    </h1>
+                    <p class="text-stone-100 text-lg md:text-xl font-light max-w-lg mt-2 font-display opacity-90 leading-relaxed border-l-2 border-primary pl-4">
+                        Misión del grupo: Explorar el acueducto antiguo y encontrar el mejor cochinillo de la ciudad. 10 amigos, un día de lluvia.
+                    </p>
                 </div>
             </div>
         </section>
 
-        <!-- Logistics Footer -->
-        <section class="border-t-2 border-gray-300 pt-12 mt-10" style="--animation-order: 3;">
-            <h2 class="text-3xl md:text-5xl font-bold mb-8">✅ Checklist del Organizador</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-                <!-- Checklist -->
-                <div class="bg-gradient-to-br from-white to-green-50 p-6 md:p-8 rounded-3xl shadow-field border-2 border-green-200">
-                    <h3 class="font-bold text-stone-800 mb-4 border-b pb-2">Tareas Críticas</h3>
-                    <ul class="space-y-3" id="checklist-container">
+        <div class="layout-container max-w-[960px] mx-auto px-6 py-16 flex flex-col gap-24">
+            <!-- Interactive Timeline Section -->
+            <section class="scroll-mt-24" id="itinerary">
+                <div class="mb-10 flex items-end justify-between border-b border-stone-200 pb-4 dark:border-stone-800">
+                    <h3 class="text-3xl font-bold text-stone-900 dark:text-white">Cronología del Día</h3>
+                    <span class="text-sm text-stone-500 font-display">Navega por las horas para ver detalles</span>
+                </div>
+                
+                <!-- Visual Timeline -->
+                <div class="flex flex-wrap md:flex-nowrap gap-4 justify-between items-center py-4 px-2 border-b border-dashed border-stone-200 dark:border-stone-800 overflow-x-auto no-scrollbar mb-6">
+                    <div class="flex items-center gap-2 text-stone-400 min-w-max">
+                        <span class="material-symbols-outlined text-sm">local_parking</span>
+                        <span class="text-xs font-medium">10:30</span>
+                    </div>
+                    <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
+                    <div class="flex items-center gap-2 text-stone-400 min-w-max">
+                        <span class="material-symbols-outlined text-sm">photo_camera</span>
+                        <span class="text-xs font-medium">11:00</span>
+                    </div>
+                    <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
+                    <div class="flex items-center gap-2 text-stone-400 min-w-max">
+                        <span class="material-symbols-outlined text-sm">fort</span>
+                        <span class="text-xs font-medium">11:30</span>
+                    </div>
+                    <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
+                    <div class="flex items-center gap-2 text-stone-400 min-w-max">
+                        <span class="material-symbols-outlined text-sm">restaurant</span>
+                        <span class="text-xs font-medium">14:00</span>
+                    </div>
+                    <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
+                    <div class="flex items-center gap-2 text-stone-400 min-w-max">
+                        <span class="material-symbols-outlined text-sm">church</span>
+                        <span class="text-xs font-medium">16:00</span>
+                    </div>
+                    <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
+                    <div class="flex items-center gap-2 text-stone-400 min-w-max">
+                        <span class="material-symbols-outlined text-sm">directions_car</span>
+                        <span class="text-xs font-medium">17:30</span>
+                    </div>
+                </div>
+
+                <!-- Timeline Navigation -->
+                <div class="flex gap-3 overflow-x-auto pb-4 no-scrollbar" id="timeline-nav">
+                    <!-- Buttons injected by JS -->
+                </div>
+
+                <!-- Dynamic Content Area -->
+                <div id="timeline-content" class="relative mt-2">
+                    <!-- Content injected by JS -->
+                </div>
+            </section>
+
+            <!-- Gastronomy Analytics Section -->
+            <section class="scroll-mt-24" id="dining">
+                <div class="mb-8 border-b border-stone-200 pb-4 dark:border-stone-800">
+                    <h3 class="text-3xl font-bold text-stone-900 dark:text-white">Análisis de Restaurantes</h3>
+                    <p class="text-stone-700 dark:text-stone-300 text-base md:text-lg mt-2 leading-relaxed font-medium">
+                        Elegir restaurante para 10 personas con dietas mixtas es complejo. Usa esta herramienta para comparar las mejores opciones disponibles.
+                    </p>
+                </div>
+                
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Restaurant List -->
+                    <div class="flex-1 flex flex-col gap-4" id="restaurant-list">
+                        <!-- Restaurant cards injected by JS -->
+                    </div>
+                    
+                    <!-- Chart Container -->
+                    <div class="flex-1 bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-8 flex flex-col items-center justify-center relative overflow-hidden">
+                        <div class="absolute top-4 right-4 text-xs text-stone-400 uppercase tracking-widest font-bold">Matriz Comparativa</div>
+                        <div class="chart-container w-full">
+                            <canvas id="restaurantChart"></canvas>
+                        </div>
+                        <div id="rest-detail" class="mt-6 text-center">
+                            <!-- Details injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logistics Footer -->
+            <section class="grid md:grid-cols-2 gap-12 pt-8 border-t border-stone-200 dark:border-stone-800" id="logistics">
+                <div>
+                    <h3 class="text-xl font-bold font-serif mb-6 text-stone-900 dark:text-white">Checklist Pre-Viaje</h3>
+                    <div class="flex flex-col gap-4" id="checklist-container">
                         <!-- Checklist items injected by JS -->
-                    </ul>
+                    </div>
                 </div>
-
-                <!-- Summary Card -->
-                <div class="bg-gradient-to-br from-gray-900 via-green-900 to-gray-800 text-gray-100 p-6 md:p-8 rounded-3xl shadow-city border-2 border-gray-700">
-                    <h3 class="font-bold text-white mb-4">Resumen Rápido</h3>
-                    <ul class="text-sm space-y-4">
-                        <li class="flex items-start">
-                            <span class="mr-2 text-xl">🧥</span>
-                            <div>
-                                <strong class="block text-white">Ropa:</strong>
-                                Calzado resistente al agua y cómodo (adoquines resbaladizos). Abrigo por capas.
+                
+                <div class="bg-stone-900 text-stone-100 rounded-xl p-8 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold font-serif mb-6 text-white">Resumen del Viaje</h3>
+                        <div class="grid grid-cols-2 gap-y-8 gap-x-4">
+                            <div class="flex flex-col gap-1">
+                                <span class="material-symbols-outlined text-stone-500 mb-1">group</span>
+                                <span class="text-2xl font-bold text-white">10</span>
+                                <span class="text-xs text-stone-400 font-medium uppercase tracking-wide">Personas</span>
                             </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-2 text-xl">📸</span>
-                            <div>
-                                <strong class="block text-white">Foto Grupal:</strong>
-                                A las 11:00 en Plaza del Azoguejo, antes de subir al Alcázar.
+                            <div class="flex flex-col gap-1">
+                                <span class="material-symbols-outlined text-stone-500 mb-1">schedule</span>
+                                <span class="text-2xl font-bold text-white">8h</span>
+                                <span class="text-xs text-stone-400 font-medium uppercase tracking-wide">Duración Total</span>
                             </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-2 text-xl">🍰</span>
-                            <div>
-                                <strong class="block text-white">Ponche Segoviano:</strong>
-                                Parada obligatoria en "Limón y Menta" antes de ir al coche.
+                            <div class="flex flex-col gap-1">
+                                <span class="material-symbols-outlined text-stone-500 mb-1">directions_walk</span>
+                                <span class="text-2xl font-bold text-white">5.2 km</span>
+                                <span class="text-xs text-stone-400 font-medium uppercase tracking-wide">Distancia Caminando</span>
                             </div>
-                        </li>
-                    </ul>
+                            <div class="flex flex-col gap-1">
+                                <span class="material-symbols-outlined text-stone-500 mb-1">rainy</span>
+                                <span class="text-2xl font-bold text-white">3-9°C</span>
+                                <span class="text-xs text-stone-400 font-medium uppercase tracking-wide">Temperatura</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-6 border-t border-stone-800">
+                        <h4 class="font-bold text-white mb-4">Recordatorios Importantes</h4>
+                        <ul class="text-sm space-y-3">
+                            <li class="flex items-start">
+                                <span class="material-symbols-outlined mr-2 text-primary text-lg">checkroom</span>
+                                <div>
+                                    <strong class="block text-white">Ropa:</strong>
+                                    Calzado resistente al agua y cómodo. Abrigo por capas.
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="material-symbols-outlined mr-2 text-primary text-lg">photo_camera</span>
+                                <div>
+                                    <strong class="block text-white">Foto Grupal:</strong>
+                                    11:00 en Plaza del Azoguejo, antes del Alcázar.
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="material-symbols-outlined mr-2 text-primary text-lg">cake</span>
+                                <div>
+                                    <strong class="block text-white">Ponche Segoviano:</strong>
+                                    Parada obligatoria en "Limón y Menta" antes de salir.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </section>
-
+            </section>
+        </div>
     </main>
     
-    <footer class="bg-gradient-to-r from-gray-900 via-gray-800 to-green-900 text-gray-400 text-center p-8 mt-20 text-sm border-t-2 border-gray-700">
-        <p class="font-semibold text-base">Plan generado por Adri 👽 e implementado por RikarPatolucas 🦆👑.</p>
-        <p class="text-xs mt-3 text-gray-500 flex items-center justify-center gap-2 flex-wrap">
-            <span>🏛️ Ciudad</span>
-            <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
-            <span>🌳 Campo</span>
-            <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
-            <span>❤️ Segovia</span>
-        </p>
+    <footer class="bg-white dark:bg-stone-950 border-t border-stone-200 dark:border-stone-800 py-8 mt-12">
+        <div class="max-w-[960px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-stone-500 text-sm">
+            <p>Plan generado por Adri 👽 e implementado por RikarPatolucas 🦆👑</p>
+            <div class="flex gap-6 mt-4 md:mt-0 items-center">
+                <span class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xs">castle</span>
+                    <span>Ciudad</span>
+                </span>
+                <span class="w-1 h-1 bg-stone-400 rounded-full"></span>
+                <span class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xs">landscape</span>
+                    <span>Campo</span>
+                </span>
+                <span class="w-1 h-1 bg-stone-400 rounded-full"></span>
+                <span class="flex items-center gap-2">
+                    <span class="text-primary">❤️</span>
+                    <span>Segovia</span>
+                </span>
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -519,42 +327,42 @@
             {
                 time: "10:30",
                 title: "Llegada y Parking",
-                icon: "🅿️",
+                icon: "local_parking",
                 desc: "Objetivo: Aparcar a cubierto. Evitar vueltas innecesarias.",
                 details: "Dirigíos al <strong>Parking Acueducto (Oriental)</strong> o al de la Estación de Autobuses. Están a pie del Acueducto y son cubiertos. <br><br><em>Tip: No intentéis aparcar en la calle, con lluvia y siendo 10 es perder el tiempo.</em>"
             },
             {
                 time: "11:00",
                 title: "Foto y Subida",
-                icon: "📸",
+                icon: "photo_camera",
                 desc: "La foto obligatoria y caminata.",
                 details: "Foto rápida en la Plaza del Azoguejo con el Acueducto de fondo (y los paraguas). Subid inmediatamente por la Calle Real hacia el Alcázar (20 min andando). Es un paseo bonito pero mejor hacerlo rápido para llegar al refugio del Alcázar."
             },
             {
                 time: "11:30",
                 title: "El Alcázar",
-                icon: "🏰",
+                icon: "fort",
                 desc: "Refugio monumental (Interior).",
                 details: "<strong>IMPORTANTE:</strong> Entradas compradas ONLINE previamente. <br>Visita: Sala de los Reyes, Trono y Museo de Artillería. <br><em>Advertencia:</em> Si llueve mucho, no subáis a la Torre de Juan II (152 escalones y vistas mojadas/nulas)."
             },
             {
                 time: "14:00",
                 title: "Comida",
-                icon: "🍽️",
+                icon: "restaurant",
                 desc: "Reserva confirmada (Vital).",
                 details: "Hora crítica. Dirigíos al restaurante reservado. <br>Objetivo: Disfrutar del cochinillo y asegurar que los vegetarianos tengan sus platos especiales listos. Sobremesa tranquila hasta que escampe un poco."
             },
             {
                 time: "16:00",
                 title: "Catedral",
-                icon: "⛪",
+                icon: "church",
                 desc: "La Dama de las Catedrales.",
                 details: "Visita perfecta para la tarde (por la mañana hay culto). Es inmensa y luminosa, ideal para bajar la comida caminando a cubierto. Abre a turismo sobre las 13:00, así que a las 16:00 está perfecta."
             },
             {
                 time: "17:30",
                 title: "Postre y Regreso",
-                icon: "🚗",
+                icon: "directions_car",
                 desc: "Ponche y Coche.",
                 details: "Parad en <strong>Pastelería Limón y Menta</strong> a por Ponche Segoviano. Si queréis café: La Colonial en Calle Real. <br><strong>18:30:</strong> Salida hacia casa para evitar el tráfico de las 20:00."
             }
@@ -562,36 +370,52 @@
 
         const restaurantData = {
             almuzara: {
-                label: "La Almuzara ⭐",
-                desc: "<strong>Restaurante Principal - Calle Marqués del Arco, 3</strong><br><strong>Lo mejor:</strong> Auténtica cocina tradicional castellana en pleno centro histórico de Segovia. Especialistas en asados y platos de cuchara típicos segovianos. <br>Ambiente acogedor y familiar, perfecto para grupos. Excelente relación calidad-precio con productos de la tierra. Opción ideal para experimentar la gastronomía local en un entorno tradicional.",
-                scores: [5, 4, 5, 5], // Vistas/Ambiente, Veggie, Precio, Tradición
+                label: "La Almuzara",
+                badge: "PRINCIPAL",
+                price: "$$",
+                rating: "4.7",
+                distance: "10 min",
+                desc: "<strong>Restaurante Principal - Calle Marqués del Arco, 3</strong><br><strong>Lo mejor:</strong> Auténtica cocina tradicional castellana en pleno centro histórico de Segovia. Especialistas en asados y platos de cuchara típicos segovianos. Ambiente acogedor y familiar, perfecto para grupos. Excelente relación calidad-precio con productos de la tierra.",
+                shortDesc: "Cocina tradicional castellana • Platos de cuchara • Menús especiales",
+                scores: [5, 4, 5, 5], // Calidad, Ambiente, Precio, Ubicación
                 mapsUrl: "https://www.google.com/maps/search/?api=1&query=La+Almuzara+Calle+Marques+del+Arco+3+Segovia",
-                menuUrl: "https://www.google.com/search?q=La+Almuzara+Segovia+menu",
-                address: "Calle Marqués del Arco, 3, Segovia"
+                menuUrl: "https://www.google.com/search?q=La+Almuzara+Segovia+menu"
+            },
+            josemaria: {
+                label: "José María",
+                badge: "",
+                price: "$$$",
+                rating: "4.8",
+                distance: "5 min",
+                desc: "<strong>Famoso por su cochinillo</strong><br>Restaurante icónico de Segovia, conocido en toda España por su excepcional cochinillo asado. Alta demanda, ambiente animado y servicio profesional. Ideal para una experiencia gastronómica auténtica en el corazón de la ciudad.",
+                shortDesc: "Famoso cochinillo • Alta demanda • Ambiente animado",
+                scores: [5, 5, 3, 5],
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jose+Maria+Segovia",
+                menuUrl: "https://www.google.com/search?q=Jose+Maria+Segovia+menu"
             },
             casares: {
                 label: "Restaurante Casares",
-                desc: "<strong>Lo mejor:</strong> Vistas directas al Acueducto y un Menú Vegetariano explícito. <br>Ideal para grupos mixtos donde se quiere asegurar la paz social.",
-                scores: [5, 5, 3, 5],
+                badge: "",
+                price: "$$",
+                rating: "4.5",
+                distance: "3 min",
+                desc: "<strong>Vistas al Acueducto</strong><br>Ubicación privilegiada junto al Acueducto con menú vegetariano explícito. Ideal para grupos mixtos donde se quiere asegurar opciones para todos. Buena relación calidad-precio con vistas espectaculares.",
+                shortDesc: "Junto al Acueducto • Menú Vegetariano específico",
+                scores: [4, 5, 4, 5],
                 mapsUrl: "https://www.google.com/maps/search/?api=1&query=Restaurante+Casares+Segovia",
-                menuUrl: "https://www.restaurantecasares.com/carta/",
-                address: "Junto al Acueducto, Segovia"
+                menuUrl: "https://www.restaurantecasares.com/carta/"
             },
-            elsitio: {
-                label: "Restaurante El Sitio",
-                desc: "<strong>Lo mejor:</strong> Ambiente informal y excelente relación calidad-precio. <br>Buenas raciones y judiones, pero preguntad si llevan carne.",
-                scores: [3, 3, 5, 4],
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Restaurante+El+Sitio+Segovia",
-                menuUrl: "https://www.google.com/search?q=Restaurante+El+Sitio+Segovia+menu",
-                address: "Cerca de la Catedral, Segovia"
-            },
-            california: {
-                label: "Restaurante California",
-                desc: "<strong>Lo mejor:</strong> Variedad moderna y opciones vegetales elaboradas. <br>Menos 'típico' pero más seguro para dietas especiales.",
-                scores: [3, 4, 4, 2],
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Restaurante+California+Segovia",
-                menuUrl: "https://www.google.com/search?q=Restaurante+California+Segovia+menu",
-                address: "Cerca del Acueducto, Segovia"
+            bernardino: {
+                label: "El Bernardino",
+                badge: "",
+                price: "$$",
+                rating: "4.5",
+                distance: "8 min",
+                desc: "<strong>Terraza con vistas</strong><br>Ambiente más relajado que otros restaurantes tradicionales, con una terraza excelente (aunque con lluvia no aplica). Cocina castellana de calidad a buen precio. Perfecto para quien busca algo más tranquilo.",
+                shortDesc: "Excelente terraza • Ambiente relajado • Buena relación calidad-precio",
+                scores: [4, 5, 4, 4],
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=El+Bernardino+Segovia",
+                menuUrl: "https://www.google.com/search?q=El+Bernardino+Segovia+menu"
             }
         };
 
@@ -610,8 +434,11 @@
             // Create Buttons
             timelineData.forEach((item, index) => {
                 const btn = document.createElement('button');
-                btn.className = `flex-shrink-0 px-6 py-3 rounded-full font-bold text-sm border-2 transition-all whitespace-nowrap ${index === 0 ? 'active-tab' : 'inactive-tab'}`;
-                btn.innerText = `${item.time} ${item.icon}`;
+                btn.className = `flex items-center gap-2 px-5 py-2.5 rounded-full transition-all shrink-0 ${index === 0 ? 'active-timeline-btn' : 'inactive-timeline-btn'} border-2`;
+                btn.innerHTML = `
+                    <span class="font-bold text-sm tracking-wide">${item.time}</span>
+                    <span class="material-symbols-outlined text-[18px]">${item.icon}</span>
+                `;
                 btn.onclick = () => loadTimelineItem(index, btn);
                 nav.appendChild(btn);
             });
@@ -627,29 +454,119 @@
             // Update buttons style
             const buttons = document.getElementById('timeline-nav').children;
             for(let btn of buttons) {
-                btn.classList.remove('active-tab');
-                btn.classList.add('inactive-tab');
+                btn.classList.remove('active-timeline-btn');
+                btn.classList.add('inactive-timeline-btn');
             }
-            activeBtn.classList.remove('inactive-tab');
-            activeBtn.classList.add('active-tab');
+            activeBtn.classList.remove('inactive-timeline-btn');
+            activeBtn.classList.add('active-timeline-btn');
 
             // Update Content with fade effect
             contentDiv.style.opacity = 0;
             setTimeout(() => {
                 contentDiv.innerHTML = `
-                    <div class="flex items-center mb-4">
-                        <span class="text-4xl mr-4">${data.icon}</span>
-                        <div>
-                            <h3 class="text-2xl font-bold text-stone-900">${data.title} <span class="text-stone-400 text-lg font-normal">| ${data.time}</span></h3>
-                            <p class="text-stone-500 font-medium">${data.desc}</p>
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary rounded-l-xl z-10 h-full"></div>
+                    <div class="bg-stone-50/50 dark:bg-stone-900/50 backdrop-blur-sm rounded-xl border border-stone-100 dark:border-stone-800 p-8 pl-10 shadow-sm">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-md shadow-primary/20 shrink-0">
+                                <span class="material-symbols-outlined text-white text-2xl">${data.icon}</span>
+                            </div>
+                            <div>
+                                <div class="flex items-baseline gap-3 mb-1">
+                                    <h4 class="text-2xl font-bold font-serif text-stone-900 dark:text-white">${data.title}</h4>
+                                    <span class="text-stone-400 font-light text-lg">| ${data.time}</span>
+                                </div>
+                                <p class="text-stone-500 dark:text-stone-400 font-medium">${data.desc}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="prose text-stone-700 bg-white p-4 rounded-lg border border-stone-200 shadow-inner">
-                        <p>${data.details}</p>
+                        <div class="bg-white dark:bg-stone-950 p-6 rounded-lg border border-stone-100 dark:border-stone-800 shadow-sm">
+                            <p class="text-stone-700 dark:text-stone-300 text-lg leading-relaxed">
+                                ${data.details}
+                            </p>
+                        </div>
                     </div>
                 `;
                 contentDiv.style.opacity = 1;
+                contentDiv.style.transition = 'opacity 0.3s ease';
             }, 200);
+        }
+
+        // --- Logic: Restaurants ---
+        let currentRestaurant = 'almuzara';
+        
+        function initRestaurants() {
+            const container = document.getElementById('restaurant-list');
+            
+            Object.keys(restaurantData).forEach((key, index) => {
+                const rest = restaurantData[key];
+                const isFirst = index === 0;
+                
+                const card = document.createElement('div');
+                card.className = `p-6 rounded-xl bg-white dark:bg-stone-900 shadow-sm cursor-pointer transition-all ${isFirst ? 'restaurant-card-selected' : 'restaurant-card-unselected'}`;
+                card.id = `rest-card-${key}`;
+                card.onclick = () => updateChart(key);
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-xl font-bold font-serif text-stone-900 dark:text-white">${rest.label}</h4>
+                            ${rest.badge ? `<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">${rest.badge}</span>` : ''}
+                        </div>
+                        <span class="bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 px-2 py-0.5 rounded text-xs font-bold">${rest.price}</span>
+                    </div>
+                    <p class="text-sm text-stone-500 dark:text-stone-400 mb-3">${rest.shortDesc}</p>
+                    <div class="flex gap-4 text-xs font-medium text-stone-400">
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">star</span> ${rest.rating}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">directions_walk</span> ${rest.distance}
+                        </span>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function updateChart(key) {
+            currentRestaurant = key;
+            const selection = restaurantData[key];
+            const detailDiv = document.getElementById('rest-detail');
+            
+            // Update card styles
+            Object.keys(restaurantData).forEach(k => {
+                const card = document.getElementById(`rest-card-${k}`);
+                if (k === key) {
+                    card.classList.remove('restaurant-card-unselected');
+                    card.classList.add('restaurant-card-selected');
+                } else {
+                    card.classList.remove('restaurant-card-selected');
+                    card.classList.add('restaurant-card-unselected');
+                }
+            });
+            
+            // Update Chart Data
+            myRadarChart.data.datasets[0].data = selection.scores;
+            myRadarChart.data.datasets[0].label = selection.label;
+            myRadarChart.update();
+
+            // Update Text with Links
+            detailDiv.innerHTML = `
+                <h5 class="text-sm font-bold text-stone-900 dark:text-white uppercase tracking-wider mb-2">Seleccionado: ${selection.label}</h5>
+                <p class="text-xs text-stone-500 dark:text-stone-400 max-w-xs mx-auto mb-4">${selection.desc}</p>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <a href="${selection.mapsUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center px-3 py-1.5 bg-primary hover:bg-primary/90 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
+                        <span class="material-symbols-outlined text-sm mr-1.5">location_on</span>
+                        Ver Mapa
+                    </a>
+                    <a href="${selection.menuUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center px-3 py-1.5 bg-stone-700 hover:bg-stone-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
+                        <span class="material-symbols-outlined text-sm mr-1.5">restaurant_menu</span>
+                        Ver Menú
+                    </a>
+                </div>
+            `;
         }
 
         // --- Logic: Chart.js ---
@@ -659,17 +576,17 @@
             const ctx = document.getElementById('restaurantChart').getContext('2d');
             
             const data = {
-                labels: ['Vistas/Ambiente', 'Opciones Veggie', 'Relación Precio', 'Tradición'],
+                labels: ['Calidad', 'Ambiente', 'Precio', 'Ubicación'],
                 datasets: [{
                     label: 'Puntuación',
-                    data: restaurantData.almuzara.scores, // Default - La Almuzara
+                    data: restaurantData.almuzara.scores,
                     fill: true,
-                    backgroundColor: 'rgba(127, 29, 29, 0.2)', // Red-900 low alpha
-                    borderColor: 'rgb(127, 29, 29)',
-                    pointBackgroundColor: 'rgb(127, 29, 29)',
+                    backgroundColor: 'rgba(23, 161, 78, 0.2)',
+                    borderColor: '#17a14e',
+                    pointBackgroundColor: '#17a14e',
                     pointBorderColor: '#fff',
                     pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(127, 29, 29)'
+                    pointHoverBorderColor: '#17a14e'
                 }]
             };
 
@@ -684,94 +601,87 @@
                     },
                     scales: {
                         r: {
-                            angleLines: { color: '#e7e5e4' },
-                            grid: { color: '#e7e5e4' },
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
                             pointLabels: {
-                                font: { size: 12, family: "'Inter', sans-serif", weight: 'bold' },
-                                color: '#44403c'
+                                font: { size: 11, family: "'Inter', sans-serif", weight: '600' },
+                                color: '#6b7280'
                             },
                             suggestedMin: 0,
                             suggestedMax: 5,
-                            ticks: { display: false } // Hide numbers on axis for cleaner look
+                            ticks: { 
+                                display: true,
+                                stepSize: 1,
+                                font: { size: 9 },
+                                color: '#9ca3af'
+                            }
                         }
                     },
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1f2937',
+                            titleFont: { family: "'Inter', sans-serif", size: 13, weight: 'bold' },
+                            bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                            padding: 12,
+                            cornerRadius: 8
+                        }
                     }
-                },
+                }
             };
 
             myRadarChart = new Chart(ctx, config);
-        }
-
-        function updateChart(key) {
-            const selection = restaurantData[key];
-            const detailDiv = document.getElementById('rest-detail');
-            
-            // Update Data
-            myRadarChart.data.datasets[0].data = selection.scores;
-            myRadarChart.data.datasets[0].label = selection.label;
-            myRadarChart.update();
-
-            // Update Text with Links
-            detailDiv.innerHTML = `
-                <h4 class="font-bold text-lg text-stone-900 mb-2">${selection.label}</h4>
-                <p class="mb-4">${selection.desc}</p>
-                <div class="flex flex-wrap gap-2 pt-3 border-t border-stone-300">
-                    <a href="${selection.mapsUrl}" target="_blank" rel="noopener noreferrer" 
-                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                        </svg>
-                        Ver en Mapa
-                    </a>
-                    <a href="${selection.menuUrl}" target="_blank" rel="noopener noreferrer" 
-                       class="inline-flex items-center px-4 py-2 bg-red-800 hover:bg-red-900 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        Ver Menú
-                    </a>
-                </div>
-            `;
         }
 
         // --- Logic: Checklist ---
         function initChecklist() {
             const container = document.getElementById('checklist-container');
             checklistItems.forEach((item, i) => {
-                const li = document.createElement('li');
-                li.className = "flex items-center p-2 hover:bg-stone-50 rounded transition-colors cursor-pointer";
-                li.innerHTML = `
-                    <input type="checkbox" id="task-${i}" class="w-5 h-5 text-red-800 rounded border-stone-300 focus:ring-red-500 cursor-pointer">
-                    <label for="task-${i}" class="ml-3 text-stone-700 select-none cursor-pointer flex-grow">${item}</label>
+                const label = document.createElement('label');
+                label.className = "group flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white dark:hover:bg-stone-900 transition-colors";
+                label.innerHTML = `
+                    <input type="checkbox" id="task-${i}" class="peer sr-only">
+                    <div class="w-6 h-6 rounded-full border-2 border-stone-300 dark:border-stone-600 peer-checked:bg-primary peer-checked:border-primary transition-all relative flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-[16px] opacity-0 peer-checked:opacity-100">check</span>
+                    </div>
+                    <span class="text-stone-600 dark:text-stone-300 peer-checked:text-stone-400 peer-checked:line-through transition-colors flex-grow">${item}</span>
                 `;
                 
-                // Toggle logic
-                li.addEventListener('click', (e) => {
+                const checkbox = label.querySelector('input');
+                const textSpan = label.querySelector('span:last-child');
+                const iconDiv = label.querySelector('div');
+                
+                label.addEventListener('click', (e) => {
                     if (e.target.tagName !== 'INPUT') {
-                        const checkbox = li.querySelector('input');
                         checkbox.checked = !checkbox.checked;
                     }
-                    // Visual strikethrough
-                    const label = li.querySelector('label');
-                    const checkbox = li.querySelector('input');
+                    
                     if(checkbox.checked) {
-                        label.classList.add('line-through', 'text-stone-400');
+                        textSpan.classList.add('line-through', 'text-stone-400');
+                        iconDiv.classList.add('bg-primary', 'border-primary');
+                        iconDiv.querySelector('.material-symbols-outlined').classList.remove('opacity-0');
+                        iconDiv.querySelector('.material-symbols-outlined').classList.add('opacity-100');
                     } else {
-                        label.classList.remove('line-through', 'text-stone-400');
+                        textSpan.classList.remove('line-through', 'text-stone-400');
+                        iconDiv.classList.remove('bg-primary', 'border-primary');
+                        iconDiv.querySelector('.material-symbols-outlined').classList.remove('opacity-100');
+                        iconDiv.querySelector('.material-symbols-outlined').classList.add('opacity-0');
                     }
                 });
 
-                container.appendChild(li);
+                container.appendChild(label);
             });
         }
 
         // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
             initTimeline();
+            initRestaurants();
             initChart();
             initChecklist();
+            
+            // Initialize first restaurant view
+            updateChart('almuzara');
         });
 
     </script>
