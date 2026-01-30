@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segovia: Plan de Lluvia - Domingo 1 Feb</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals (Stone/Sand) for background, Deep Red (Segovia/Brick) for accents, Muted Blue for rain context. -->
+    
+    <!-- Application Structure Plan: 
+         1. Hero Section: Sets the context (Date, Weather, Group Size) immediately.
+         2. Interactive Timeline (The Core): Instead of a long text list, a clickable timeline lets users focus on specific time blocks. This prevents information overload.
+         3. Gastronomy Analytics: A dedicated section to solve the "where to eat" problem. Uses a Radar Chart to compare the 3 restaurant options based on 'Vegetarian Options', 'Views', 'Price', and 'Tradition', helping the group make a data-driven decision.
+         4. Logistics & Checklist: A functional footer area with actionable items (parking info and an interactive toggle checklist).
+         Rationale: The structure prioritizes the flow of the day (Time) and the hardest decision (Food), keeping logistics handy but secondary.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Timeline: Goal -> Organize the day. Method -> Horizontal flex buttons triggering DOM updates. Justification -> Interactive flow is better than scrolling text for a schedule.
+         2. Restaurant Radar Chart: Goal -> Compare qualitative restaurant attributes (Vibe, Veggie-friendliness). Method -> Chart.js Radar Chart. Interaction -> Clicking buttons updates the chart dataset. Justification -> Visualizes the trade-offs between "Traditional" and "Modern/Veggie" options clearly.
+         3. Checklist: Goal -> Task management. Method -> JS Event Listeners on checkboxes. Justification -> Functional utility for the organizer.
+         4. Weather Indicator: Goal -> Reminder of constraints. Method -> CSS/Unicode icons. Justification -> Simple visual reinforcement of the "Rain" constraint.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* Stone-100 */
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .timeline-connector {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+            height: 2rem;
+            width: 2px;
+            background-color: #d6d3d1; /* Stone-300 */
+            z-index: 0;
+        }
+
+        /* Chart Container Styling as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        .active-tab {
+            background-color: #7f1d1d; /* Red-900 */
+            color: white;
+            border-color: #7f1d1d;
+        }
+
+        .inactive-tab {
+            background-color: white;
+            color: #44403c; /* Stone-700 */
+            border-color: #e7e5e4; /* Stone-200 */
+        }
+
+        .inactive-tab:hover {
+            background-color: #fca5a5; /* Red-200 */
+            color: #7f1d1d;
+        }
+
+        .weather-rain {
+            background: linear-gradient(180deg, #e0f2fe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body class="text-stone-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-stone-900 text-stone-50 p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight">🏰 Segovia: Operación Domingo Lluvioso</h1>
+            <span class="text-xs bg-stone-700 px-2 py-1 rounded text-stone-200">10 PAX | 1 FEB</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-4xl mx-auto p-4 space-y-8">
+
+        <!-- Context & Hero -->
+        <header class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-2 glass-panel rounded-xl p-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-9xl select-none">🌧️</div>
+                <h2 class="text-2xl font-bold text-stone-900 mb-2">Resumen de la Misión</h2>
+                <p class="text-stone-600 mb-4">
+                    Un plan optimizado para 10 amigos en un día de lluvia. El objetivo es minimizar el tiempo a la intemperie, asegurar la comida para todos (vegetarianos incluidos) y disfrutar de los interiores monumentales de Segovia.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">☔ Lluvia Ligera (3-9°C)</span>
+                    <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold">🍖 Gastronomía</span>
+                    <span class="px-3 py-1 bg-stone-200 text-stone-800 rounded-full text-sm font-semibold">🏛️ Interiores</span>
+                </div>
+            </div>
+            
+            <div class="glass-panel rounded-xl p-6 flex flex-col justify-center items-center text-center weather-rain">
+                <div class="text-4xl mb-2">🚗</div>
+                <h3 class="font-bold text-lg">Aparcamiento</h3>
+                <p class="text-sm text-stone-600 mt-2">Directos al <strong>Parking Acueducto</strong> (Oriental) o Estación de Autobuses.</p>
+                <p class="text-xs text-red-600 mt-1 font-bold">¡NO aparcar en calle!</p>
+            </div>
+        </header>
+
+        <!-- Interactive Timeline Section -->
+        <section>
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold text-stone-900">⏱️ Cronología del Día</h2>
+                <p class="text-stone-500 text-sm">Navega por las horas para ver los detalles estratégicos de cada etapa.</p>
+            </div>
+
+            <!-- Timeline Navigation -->
+            <div class="flex overflow-x-auto pb-4 gap-2 no-scrollbar" id="timeline-nav">
+                <!-- Buttons injected by JS -->
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div id="timeline-content" class="glass-panel rounded-xl p-6 mt-2 transition-all duration-300 ease-in-out border-l-8 border-stone-800">
+                <!-- Content injected by JS -->
+            </div>
+        </section>
+
+        <!-- Gastronomy Analytics Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div>
+                <h2 class="text-2xl font-bold text-stone-900 mb-2">🍽️ Decisión Gastronómica</h2>
+                <p class="text-stone-600 text-sm mb-6">
+                    Elegir restaurante para 10 personas con dietas mixtas es complejo. Usa esta herramienta para comparar las tres mejores opciones disponibles cerca del centro.
+                </p>
+                
+                <div class="space-y-3">
+                    <button onclick="updateChart('casares')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg group-hover:text-red-900">1. Restaurante Casares</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Recomendado</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mt-1">Junto al Acueducto • Menú Vegetariano específico</p>
+                    </button>
+
+                    <button onclick="updateChart('elsitio')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg group-hover:text-red-900">2. Restaurante El Sitio</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mt-1">Cerca de la Catedral • Calidad/Precio • Informal</p>
+                    </button>
+
+                    <button onclick="updateChart('california')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg group-hover:text-red-900">3. Restaurante California</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mt-1">Cerca del Acueducto • Variedad Moderna</p>
+                    </button>
+                </div>
+                
+                <div id="rest-detail" class="mt-6 p-4 bg-stone-100 rounded-lg text-sm text-stone-700 border-l-4 border-red-800">
+                    <p class="font-bold">💡 Consejo:</p>
+                    <p>Selecciona un restaurante arriba para ver sus detalles y métricas.</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center">
+                <h3 class="text-sm font-bold text-stone-400 uppercase tracking-widest mb-4">Análisis de Opciones</h3>
+                <div class="chart-container">
+                    <canvas id="restaurantChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logistics Footer -->
+        <section class="border-t border-stone-300 pt-8 mt-4">
+            <h2 class="text-2xl font-bold text-stone-900 mb-6">✅ Checklist del Organizador</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Checklist -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="font-bold text-stone-800 mb-4 border-b pb-2">Tareas Críticas</h3>
+                    <ul class="space-y-3" id="checklist-container">
+                        <!-- Checklist items injected by JS -->
+                    </ul>
+                </div>
+
+                <!-- Summary Card -->
+                <div class="bg-stone-800 text-stone-200 p-6 rounded-xl shadow-lg">
+                    <h3 class="font-bold text-white mb-4">Resumen Rápido</h3>
+                    <ul class="text-sm space-y-4">
+                        <li class="flex items-start">
+                            <span class="mr-2 text-xl">🧥</span>
+                            <div>
+                                <strong class="block text-white">Ropa:</strong>
+                                Calzado resistente al agua y cómodo (adoquines resbaladizos). Abrigo por capas.
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 text-xl">📸</span>
+                            <div>
+                                <strong class="block text-white">Foto Grupal:</strong>
+                                A las 11:00 en Plaza del Azoguejo, antes de subir al Alcázar.
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 text-xl">🍰</span>
+                            <div>
+                                <strong class="block text-white">Ponche Segoviano:</strong>
+                                Parada obligatoria en "Limón y Menta" antes de ir al coche.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-stone-900 text-stone-500 text-center p-6 mt-12 text-sm">
+        <p>Plan generado para un domingo lluvioso en Segovia.</p>
+    </footer>
+
+    <script>
+        // --- Data ---
+        const timelineData = [
+            {
+                time: "10:30",
+                title: "Llegada y Parking",
+                icon: "🅿️",
+                desc: "Objetivo: Aparcar a cubierto. Evitar vueltas innecesarias.",
+                details: "Dirigíos al <strong>Parking Acueducto (Oriental)</strong> o al de la Estación de Autobuses. Están a pie del Acueducto y son cubiertos. <br><br><em>Tip: No intentéis aparcar en la calle, con lluvia y siendo 10 es perder el tiempo.</em>"
+            },
+            {
+                time: "11:00",
+                title: "Foto y Subida",
+                icon: "📸",
+                desc: "La foto obligatoria y caminata.",
+                details: "Foto rápida en la Plaza del Azoguejo con el Acueducto de fondo (y los paraguas). Subid inmediatamente por la Calle Real hacia el Alcázar (20 min andando). Es un paseo bonito pero mejor hacerlo rápido para llegar al refugio del Alcázar."
+            },
+            {
+                time: "11:30",
+                title: "El Alcázar",
+                icon: "🏰",
+                desc: "Refugio monumental (Interior).",
+                details: "<strong>IMPORTANTE:</strong> Entradas compradas ONLINE previamente. <br>Visita: Sala de los Reyes, Trono y Museo de Artillería. <br><em>Advertencia:</em> Si llueve mucho, no subáis a la Torre de Juan II (152 escalones y vistas mojadas/nulas)."
+            },
+            {
+                time: "14:00",
+                title: "Comida",
+                icon: "🍽️",
+                desc: "Reserva confirmada (Vital).",
+                details: "Hora crítica. Dirigíos al restaurante reservado. <br>Objetivo: Disfrutar del cochinillo y asegurar que los vegetarianos tengan sus platos especiales listos. Sobremesa tranquila hasta que escampe un poco."
+            },
+            {
+                time: "16:00",
+                title: "Catedral",
+                icon: "⛪",
+                desc: "La Dama de las Catedrales.",
+                details: "Visita perfecta para la tarde (por la mañana hay culto). Es inmensa y luminosa, ideal para bajar la comida caminando a cubierto. Abre a turismo sobre las 13:00, así que a las 16:00 está perfecta."
+            },
+            {
+                time: "17:30",
+                title: "Postre y Regreso",
+                icon: "🚗",
+                desc: "Ponche y Coche.",
+                details: "Parad en <strong>Pastelería Limón y Menta</strong> a por Ponche Segoviano. Si queréis café: La Colonial en Calle Real. <br><strong>18:30:</strong> Salida hacia casa para evitar el tráfico de las 20:00."
+            }
+        ];
+
+        const restaurantData = {
+            casares: {
+                label: "Restaurante Casares",
+                desc: "<strong>Lo mejor:</strong> Vistas directas al Acueducto y un Menú Vegetariano explícito. <br>Ideal para grupos mixtos donde se quiere asegurar la paz social.",
+                scores: [5, 5, 3, 5] // Vistas, Veggie, Precio (Inverso: 5=Barato? No, 5=Mejor precio/calidad o 5=Caro. Let's say 5 is best attribute. Precio 3 = Caro/Medio), Tradicion
+            },
+            elsitio: {
+                label: "Restaurante El Sitio",
+                desc: "<strong>Lo mejor:</strong> Ambiente informal y excelente relación calidad-precio. <br>Buenas raciones y judiones, pero preguntad si llevan carne.",
+                scores: [3, 3, 5, 4] 
+            },
+            california: {
+                label: "Restaurante California",
+                desc: "<strong>Lo mejor:</strong> Variedad moderna y opciones vegetales elaboradas. <br>Menos 'típico' pero más seguro para dietas especiales.",
+                scores: [3, 4, 4, 2]
+            }
+        };
+
+        const checklistItems = [
+            "Reservar Restaurante (Prioridad Máxima)",
+            "Comprar entradas Alcázar (Turno 11:30/12:00)",
+            "Enviar ubicación Parking al grupo",
+            "Chequear paraguas y calzado cómodo"
+        ];
+
+        // --- Logic: Timeline ---
+        function initTimeline() {
+            const nav = document.getElementById('timeline-nav');
+            const content = document.getElementById('timeline-content');
+            
+            // Create Buttons
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `flex-shrink-0 px-6 py-3 rounded-full font-bold text-sm border-2 transition-all whitespace-nowrap ${index === 0 ? 'active-tab' : 'inactive-tab'}`;
+                btn.innerText = `${item.time} ${item.icon}`;
+                btn.onclick = () => loadTimelineItem(index, btn);
+                nav.appendChild(btn);
+            });
+
+            // Load initial
+            loadTimelineItem(0, nav.children[0]);
+        }
+
+        function loadTimelineItem(index, activeBtn) {
+            const data = timelineData[index];
+            const contentDiv = document.getElementById('timeline-content');
+            
+            // Update buttons style
+            const buttons = document.getElementById('timeline-nav').children;
+            for(let btn of buttons) {
+                btn.classList.remove('active-tab');
+                btn.classList.add('inactive-tab');
+            }
+            activeBtn.classList.remove('inactive-tab');
+            activeBtn.classList.add('active-tab');
+
+            // Update Content with fade effect
+            contentDiv.style.opacity = 0;
+            setTimeout(() => {
+                contentDiv.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <span class="text-4xl mr-4">${data.icon}</span>
+                        <div>
+                            <h3 class="text-2xl font-bold text-stone-900">${data.title} <span class="text-stone-400 text-lg font-normal">| ${data.time}</span></h3>
+                            <p class="text-stone-500 font-medium">${data.desc}</p>
+                        </div>
+                    </div>
+                    <div class="prose text-stone-700 bg-white p-4 rounded-lg border border-stone-200 shadow-inner">
+                        <p>${data.details}</p>
+                    </div>
+                `;
+                contentDiv.style.opacity = 1;
+            }, 200);
+        }
+
+        // --- Logic: Chart.js ---
+        let myRadarChart;
+
+        function initChart() {
+            const ctx = document.getElementById('restaurantChart').getContext('2d');
+            
+            const data = {
+                labels: ['Vistas/Ambiente', 'Opciones Veggie', 'Relación Precio', 'Tradición'],
+                datasets: [{
+                    label: 'Puntuación',
+                    data: restaurantData.casares.scores, // Default
+                    fill: true,
+                    backgroundColor: 'rgba(127, 29, 29, 0.2)', // Red-900 low alpha
+                    borderColor: 'rgb(127, 29, 29)',
+                    pointBackgroundColor: 'rgb(127, 29, 29)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(127, 29, 29)'
+                }]
+            };
+
+            const config = {
+                type: 'radar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 3 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e7e5e4' },
+                            grid: { color: '#e7e5e4' },
+                            pointLabels: {
+                                font: { size: 12, family: "'Inter', sans-serif", weight: 'bold' },
+                                color: '#44403c'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 5,
+                            ticks: { display: false } // Hide numbers on axis for cleaner look
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                },
+            };
+
+            myRadarChart = new Chart(ctx, config);
+        }
+
+        function updateChart(key) {
+            const selection = restaurantData[key];
+            const detailDiv = document.getElementById('rest-detail');
+            
+            // Update Data
+            myRadarChart.data.datasets[0].data = selection.scores;
+            myRadarChart.data.datasets[0].label = selection.label;
+            myRadarChart.update();
+
+            // Update Text
+            detailDiv.innerHTML = `
+                <h4 class="font-bold text-lg text-stone-900 mb-1">${selection.label}</h4>
+                <p>${selection.desc}</p>
+            `;
+        }
+
+        // --- Logic: Checklist ---
+        function initChecklist() {
+            const container = document.getElementById('checklist-container');
+            checklistItems.forEach((item, i) => {
+                const li = document.createElement('li');
+                li.className = "flex items-center p-2 hover:bg-stone-50 rounded transition-colors cursor-pointer";
+                li.innerHTML = `
+                    <input type="checkbox" id="task-${i}" class="w-5 h-5 text-red-800 rounded border-stone-300 focus:ring-red-500 cursor-pointer">
+                    <label for="task-${i}" class="ml-3 text-stone-700 select-none cursor-pointer flex-grow">${item}</label>
+                `;
+                
+                // Toggle logic
+                li.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'INPUT') {
+                        const checkbox = li.querySelector('input');
+                        checkbox.checked = !checkbox.checked;
+                    }
+                    // Visual strikethrough
+                    const label = li.querySelector('label');
+                    const checkbox = li.querySelector('input');
+                    if(checkbox.checked) {
+                        label.classList.add('line-through', 'text-stone-400');
+                    } else {
+                        label.classList.remove('line-through', 'text-stone-400');
+                    }
+                });
+
+                container.appendChild(li);
+            });
+        }
+
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initChart();
+            initChecklist();
+        });
+
+    </script>
+</body>
+</html>
