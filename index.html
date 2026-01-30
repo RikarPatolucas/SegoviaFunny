@@ -150,36 +150,53 @@
             <div>
                 <h2 class="text-2xl font-bold text-stone-900 mb-2">🍽️ Decisión Gastronómica</h2>
                 <p class="text-stone-600 text-sm mb-6">
-                    Elegir restaurante para 10 personas con dietas mixtas es complejo. Usa esta herramienta para comparar las tres mejores opciones disponibles cerca del centro.
+                    Elegir restaurante para 10 personas con dietas mixtas es complejo. Usa esta herramienta para comparar las mejores opciones disponibles cerca del centro.
                 </p>
+                
+                <!-- Restaurante Principal Destacado -->
+                <div class="mb-6 relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-red-900 to-red-700 rounded-xl blur opacity-25"></div>
+                    <button onclick="updateChart('almuzara')" class="relative w-full text-left p-6 rounded-xl border-2 transition-all hover:shadow-2xl bg-gradient-to-br from-red-900 to-red-800 text-white border-red-900 group focus:ring-4 focus:ring-red-500">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="font-bold text-2xl">⭐ La Almuzara</span>
+                            <span class="text-xs bg-yellow-300 text-red-900 px-3 py-1 rounded-full font-bold animate-pulse">PRINCIPAL</span>
+                        </div>
+                        <p class="text-sm text-red-100 mb-2">📍 Calle Marqués del Arco, 3 - Segovia</p>
+                        <p class="text-xs text-red-200">Cocina tradicional castellana • Platos de cuchara • Menús especiales disponibles</p>
+                    </button>
+                </div>
+
+                <!-- Opciones Secundarias -->
+                <div class="border-t border-stone-300 pt-4 mb-3">
+                    <p class="text-xs text-stone-500 uppercase tracking-wide font-semibold mb-3">Opciones Alternativas</p>
+                </div>
                 
                 <div class="space-y-3">
                     <button onclick="updateChart('casares')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg group-hover:text-red-900">1. Restaurante Casares</span>
-                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Recomendado</span>
+                            <span class="font-bold text-base group-hover:text-red-900">Restaurante Casares</span>
                         </div>
                         <p class="text-xs text-stone-500 mt-1">Junto al Acueducto • Menú Vegetariano específico</p>
                     </button>
 
                     <button onclick="updateChart('elsitio')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg group-hover:text-red-900">2. Restaurante El Sitio</span>
+                            <span class="font-bold text-base group-hover:text-red-900">Restaurante El Sitio</span>
                         </div>
                         <p class="text-xs text-stone-500 mt-1">Cerca de la Catedral • Calidad/Precio • Informal</p>
                     </button>
 
                     <button onclick="updateChart('california')" class="w-full text-left p-4 rounded-lg border transition-all hover:shadow-md bg-white border-stone-200 hover:border-red-800 group focus:ring-2 focus:ring-red-500">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg group-hover:text-red-900">3. Restaurante California</span>
+                            <span class="font-bold text-base group-hover:text-red-900">Restaurante California</span>
                         </div>
                         <p class="text-xs text-stone-500 mt-1">Cerca del Acueducto • Variedad Moderna</p>
                     </button>
                 </div>
                 
                 <div id="rest-detail" class="mt-6 p-4 bg-stone-100 rounded-lg text-sm text-stone-700 border-l-4 border-red-800">
-                    <p class="font-bold">💡 Consejo:</p>
-                    <p>Selecciona un restaurante arriba para ver sus detalles y métricas.</p>
+                    <h4 class="font-bold text-lg text-stone-900 mb-1">La Almuzara ⭐</h4>
+                    <p><strong>Restaurante Principal - Calle Marqués del Arco, 3</strong><br><strong>Lo mejor:</strong> Auténtica cocina tradicional castellana en pleno centro histórico de Segovia. Especialistas en asados y platos de cuchara típicos segovianos. <br>Ambiente acogedor y familiar, perfecto para grupos. Excelente relación calidad-precio con productos de la tierra. Opción ideal para experimentar la gastronomía local en un entorno tradicional.</p>
                 </div>
             </div>
 
@@ -288,10 +305,15 @@
         ];
 
         const restaurantData = {
+            almuzara: {
+                label: "La Almuzara ⭐",
+                desc: "<strong>Restaurante Principal - Calle Marqués del Arco, 3</strong><br><strong>Lo mejor:</strong> Auténtica cocina tradicional castellana en pleno centro histórico de Segovia. Especialistas en asados y platos de cuchara típicos segovianos. <br>Ambiente acogedor y familiar, perfecto para grupos. Excelente relación calidad-precio con productos de la tierra. Opción ideal para experimentar la gastronomía local en un entorno tradicional.",
+                scores: [5, 4, 5, 5] // Vistas/Ambiente, Veggie, Precio, Tradición
+            },
             casares: {
                 label: "Restaurante Casares",
                 desc: "<strong>Lo mejor:</strong> Vistas directas al Acueducto y un Menú Vegetariano explícito. <br>Ideal para grupos mixtos donde se quiere asegurar la paz social.",
-                scores: [5, 5, 3, 5] // Vistas, Veggie, Precio (Inverso: 5=Barato? No, 5=Mejor precio/calidad o 5=Caro. Let's say 5 is best attribute. Precio 3 = Caro/Medio), Tradicion
+                scores: [5, 5, 3, 5]
             },
             elsitio: {
                 label: "Restaurante El Sitio",
@@ -372,7 +394,7 @@
                 labels: ['Vistas/Ambiente', 'Opciones Veggie', 'Relación Precio', 'Tradición'],
                 datasets: [{
                     label: 'Puntuación',
-                    data: restaurantData.casares.scores, // Default
+                    data: restaurantData.almuzara.scores, // Default - La Almuzara
                     fill: true,
                     backgroundColor: 'rgba(127, 29, 29, 0.2)', // Red-900 low alpha
                     borderColor: 'rgb(127, 29, 29)',
