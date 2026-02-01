@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script id="tailwind-config">
         tailwind.config = {
@@ -52,22 +51,6 @@
             scrollbar-width: none;
         }
         
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 400px;
-            max-height: 450px;
-        }
-        
-        @media (max-width: 640px) {
-            .chart-container {
-                height: 320px;
-            }
-        }
-        
         .active-timeline-btn {
             background: #17a14e;
             color: white;
@@ -86,22 +69,6 @@
             color: #17a14e;
         }
         
-        .restaurant-card-selected {
-            border-left-color: #17a14e !important;
-            border-left-width: 4px;
-            opacity: 1;
-        }
-        
-        .restaurant-card-unselected {
-            border-left-color: transparent;
-            border-left-width: 4px;
-            opacity: 0.7;
-        }
-        
-        .restaurant-card-unselected:hover {
-            border-left-color: #d1d5db;
-            opacity: 1;
-        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-stone-dark dark:text-stone-light min-h-screen flex flex-col">
@@ -162,27 +129,68 @@
                     <h3 class="text-3xl font-bold text-stone-900 dark:text-white">Cronología del Día</h3>
                     <span class="text-sm text-stone-500 font-display">Navega por las horas para ver detalles</span>
                 </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-6 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="material-symbols-outlined text-primary">cloud</span>
+                            <h4 class="text-lg font-bold text-stone-900 dark:text-white">Tiempo actualizado</h4>
+                        </div>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+                            Mira el parte en directo justo antes de salir para ajustar paraguas, capas y ritmo.
+                        </p>
+                        <a href="https://www.aemet.es/es/eltiempo/prediccion/municipios/segovia-id40194" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center mt-4 text-sm font-semibold text-primary hover:text-primary/80">
+                            Ver previsión en tiempo real
+                            <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
+                        </a>
+                    </div>
+                    <div class="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-6 shadow-sm">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="material-symbols-outlined text-primary">route</span>
+                            <h4 class="text-lg font-bold text-stone-900 dark:text-white">Ruta final decidida</h4>
+                        </div>
+                        <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed mb-4">
+                            La diferencia entre opciones es solo el punto de aparcamiento. Desde ahí, todos al Acueducto.
+                        </p>
+                        <ul class="text-sm text-stone-600 dark:text-stone-300 space-y-2">
+                            <li>
+                                <strong>Opción 1:</strong> Aparcando en parking (pagando).
+                                <a href="https://maps.app.goo.gl/kGtTGoVKyL1xUQRJ9" target="_blank" rel="noopener noreferrer" class="text-primary font-semibold hover:text-primary/80">Ver ruta</a>
+                            </li>
+                            <li>
+                                <strong>Opción 2:</strong> Aparcando en la calle sin pagar (vía Roma).
+                                <a href="https://maps.app.goo.gl/YTtyU7hA6mDrFBU1A" target="_blank" rel="noopener noreferrer" class="text-primary font-semibold hover:text-primary/80">Ver ruta</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 
                 <!-- Visual Timeline -->
                 <div class="flex flex-wrap md:flex-nowrap gap-4 justify-between items-center py-4 px-2 border-b border-dashed border-stone-200 dark:border-stone-800 overflow-x-auto no-scrollbar mb-6">
                     <div class="flex items-center gap-2 text-stone-400 min-w-max">
                         <span class="material-symbols-outlined text-sm">directions_car</span>
-                        <span class="text-xs font-medium">9:30</span>
+                        <span class="text-xs font-medium">9:00</span>
                     </div>
                     <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
                     <div class="flex items-center gap-2 text-stone-400 min-w-max">
                         <span class="material-symbols-outlined text-sm">local_parking</span>
-                        <span class="text-xs font-medium">10:30</span>
+                        <span class="text-xs font-medium">10:15</span>
                     </div>
                     <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
                     <div class="flex items-center gap-2 text-stone-400 min-w-max">
                         <span class="material-symbols-outlined text-sm">photo_camera</span>
-                        <span class="text-xs font-medium">11:00</span>
+                        <span class="text-xs font-medium">10:30</span>
+                    </div>
+                    <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
+                    <div class="flex items-center gap-2 text-stone-400 min-w-max">
+                        <span class="material-symbols-outlined text-sm">church</span>
+                        <span class="text-xs font-medium">11:15</span>
                     </div>
                     <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
                     <div class="flex items-center gap-2 text-stone-400 min-w-max">
                         <span class="material-symbols-outlined text-sm">fort</span>
-                        <span class="text-xs font-medium">11:30</span>
+                        <span class="text-xs font-medium">12:30</span>
                     </div>
                     <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
                     <div class="flex items-center gap-2 text-stone-400 min-w-max">
@@ -191,8 +199,8 @@
                     </div>
                     <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
                     <div class="flex items-center gap-2 text-stone-400 min-w-max">
-                        <span class="material-symbols-outlined text-sm">church</span>
-                        <span class="text-xs font-medium">16:00</span>
+                        <span class="material-symbols-outlined text-sm">landscape</span>
+                        <span class="text-xs font-medium">16:30</span>
                     </div>
                     <div class="h-[1px] w-full min-w-[20px] bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
                     <div class="flex items-center gap-2 text-stone-400 min-w-max">
@@ -215,27 +223,41 @@
             <!-- Gastronomy Analytics Section -->
             <section class="scroll-mt-24" id="dining">
                 <div class="mb-8 border-b border-stone-200 pb-4 dark:border-stone-800">
-                    <h3 class="text-3xl font-bold text-stone-900 dark:text-white">Análisis de Restaurantes</h3>
+                    <h3 class="text-3xl font-bold text-stone-900 dark:text-white">Restaurante elegido</h3>
                     <p class="text-stone-700 dark:text-stone-300 text-base md:text-lg mt-2 leading-relaxed font-medium">
-                        Elegir restaurante para 10 personas con dietas mixtas es complejo. Usa esta herramienta para comparar las mejores opciones disponibles.
+                        Reserva confirmada para las 14:00. No es un templo del cochinillo, pero sí tiene opciones potentes para carnívoros y platos tradicionales castellanos.
                     </p>
                 </div>
-                
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Restaurant List -->
-                    <div class="flex-1 flex flex-col gap-4" id="restaurant-list">
-                        <!-- Restaurant cards injected by JS -->
+                <div class="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-8 flex flex-col gap-6 shadow-sm">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <h4 class="text-2xl font-bold font-serif text-stone-900 dark:text-white">La Almuzara</h4>
+                            <p class="text-sm text-stone-500 dark:text-stone-400">Calle Marqués del Arco, 3 · Cocina castellana · Ideal para grupos</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-primary/10 text-primary border border-primary/20">14:00 reserva</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300">$$</span>
+                        </div>
                     </div>
-                    
-                    <!-- Chart Container -->
-                    <div class="flex-1 bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-8 flex flex-col items-center justify-center relative overflow-hidden">
-                        <div class="absolute top-4 right-4 text-xs text-stone-400 uppercase tracking-widest font-bold">Matriz Comparativa</div>
-                        <div class="chart-container w-full">
-                            <canvas id="restaurantChart"></canvas>
-                        </div>
-                        <div id="rest-detail" class="mt-6 text-center">
-                            <!-- Details injected by JS -->
-                        </div>
+                    <p class="text-stone-600 dark:text-stone-300 text-base leading-relaxed">
+                        Parada gastronómica central del día con platos de cuchara, guisos y carnes. Perfecto para recuperar calor después del paseo por el casco histórico. Recomendación: guarda energía para el postre y deja hueco para un vino de la zona.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://maps.app.goo.gl/GVxw1P9pPj2F2f8F9" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
+                            <span class="material-symbols-outlined text-lg mr-2">location_on</span>
+                            Cómo llegar
+                        </a>
+                        <a href="https://www.google.com/maps/place/La+Almuzara,+Segovia/" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center px-4 py-2 bg-stone-700 hover:bg-stone-800 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
+                            <span class="material-symbols-outlined text-lg mr-2">reviews</span>
+                            Reseñas y fotos
+                        </a>
+                        <a href="https://www.google.com/search?q=La+Almuzara+Segovia+menu" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center px-4 py-2 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-sm font-semibold rounded-lg transition-colors hover:bg-stone-100 dark:hover:bg-stone-800">
+                            <span class="material-symbols-outlined text-lg mr-2">restaurant_menu</span>
+                            Ver menú
+                        </a>
                     </div>
                 </div>
             </section>
@@ -308,7 +330,7 @@
                                 <span class="material-symbols-outlined mr-2 text-primary text-lg">photo_camera</span>
                                 <div>
                                     <strong class="block text-white">Foto Grupal:</strong>
-                                    11:00 en Plaza del Azoguejo, antes del Alcázar.
+                                    10:30 en la Plaza del Azoguejo (Acueducto).
                                 </div>
                             </li>
                             <li class="flex items-start">
@@ -351,52 +373,60 @@
         // --- Data ---
         const timelineData = [
             {
-                time: "9:30",
+                time: "9:00",
                 title: "Salida desde la Sierra",
                 icon: "directions_car",
-                desc: "Inicio del viaje hacia Segovia.",
-                details: "Punto de encuentro y salida desde la Sierra. Aseguraos de llevar todo lo necesario: paraguas, calzado cómodo y buen ánimo. <br><br><em>Tiempo estimado de viaje: aproximadamente 1 hora hasta Segovia.</em>",
+                desc: "Salida puntual hacia Segovia.",
+                details: "Hora oficial de salida: <strong>9:00</strong>. Revisad paraguas, calzado cómodo y café en mano. <br><br><em>Tiempo estimado de viaje: ~1 hora.</em>",
                 mapsUrl: "https://www.google.com/maps/search/?api=1&query=Guadarrama+Madrid"
             },
             {
-                time: "10:30",
+                time: "10:15",
                 title: "Llegada y Parking",
                 icon: "local_parking",
-                desc: "Objetivo: Aparcar a cubierto. Evitar vueltas innecesarias.",
-                details: "Dirigíos al <strong>Parking Acueducto (Oriental)</strong> o al de la Estación de Autobuses. Están a pie del Acueducto y son cubiertos. <br><br><em>Tip: No intentéis aparcar en la calle, con lluvia y siendo 10 es perder el tiempo.</em>",
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Parking+Acueducto+Oriental+Segovia"
+                desc: "Dos opciones claras según el punto de aparcamiento.",
+                details: "<strong>Opción 1:</strong> Aparcando en parking (pagando). <a href=\"https://maps.app.goo.gl/kGtTGoVKyL1xUQRJ9\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-primary font-semibold\">Ver ruta</a><br><strong>Opción 2:</strong> Aparcando en la calle sin pagar (vía Roma). <a href=\"https://maps.app.goo.gl/YTtyU7hA6mDrFBU1A\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-primary font-semibold\">Ver ruta</a><br><br><em>Desde cualquiera de las dos, todos al Acueducto.</em>",
+                mapsUrl: "https://maps.app.goo.gl/kGtTGoVKyL1xUQRJ9"
             },
             {
-                time: "11:00",
-                title: "Foto y Subida",
+                time: "10:30",
+                title: "Acueducto y Quedada",
                 icon: "photo_camera",
-                desc: "La foto obligatoria y caminata.",
-                details: "Foto rápida en la Plaza del Azoguejo con el Acueducto de fondo (y los paraguas). Subid inmediatamente por la Calle Real hacia el Alcázar (20 min andando). Es un paseo bonito pero mejor hacerlo rápido para llegar al refugio del Alcázar.",
+                desc: "Foto obligatoria en el punto cero.",
+                details: "Quedada oficial en la Plaza del Azoguejo. Fotos con el Acueducto en todo su esplendor y mini briefing del día. Desde aquí salimos caminando hacia la Plaza Mayor.",
                 mapsUrl: "https://www.google.com/maps/search/?api=1&query=Plaza+del+Azoguejo+Acueducto+Segovia"
             },
             {
-                time: "11:30",
+                time: "11:15",
+                title: "Plaza Mayor y Catedral",
+                icon: "church",
+                desc: "Corazón histórico y foto frente a la Catedral.",
+                details: "Subimos por la Calle Real hasta la Plaza Mayor para ver la Catedral. Si vamos bien de tiempo, entramos a verla por dentro y hacemos las fotos que falten.",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Plaza+Mayor+Segovia"
+            },
+            {
+                time: "12:30",
                 title: "El Alcázar",
                 icon: "fort",
-                desc: "Refugio monumental (Interior).",
-                details: "<strong>IMPORTANTE:</strong> Entradas compradas ONLINE previamente. <br>Visita: Sala de los Reyes, Trono y Museo de Artillería. <br><em>Advertencia:</em> Si llueve mucho, no subáis a la Torre de Juan II (152 escalones y vistas mojadas/nulas).",
+                desc: "La joya de la corona segoviana.",
+                details: "Visita interior del Alcázar con calma. Sala de los Reyes, Trono y paseo por las estancias principales. Guardad batería para fotos porque aquí se dispara sin miedo.",
                 mapsUrl: "https://www.google.com/maps/search/?api=1&query=Alcazar+de+Segovia"
             },
             {
                 time: "14:00",
                 title: "Comida",
                 icon: "restaurant",
-                desc: "Reserva confirmada (Vital).",
-                details: "Hora crítica. Dirigíos al restaurante reservado. <br>Objetivo: Disfrutar del cochinillo y asegurar que los vegetarianos tengan sus platos especiales listos. Sobremesa tranquila hasta que escampe un poco.",
+                desc: "Reserva confirmada en La Almuzara.",
+                details: "Hora crítica: <strong>14:00</strong>. Cocina castellana con opciones potentes para carnívoros (sin ser templo del cochinillo). Sobremesa tranquila y recarga de energía.",
                 mapsUrl: "https://www.google.com/maps/search/?api=1&query=La+Almuzara+Calle+Marques+del+Arco+3+Segovia"
             },
             {
-                time: "16:00",
-                title: "Catedral",
-                icon: "church",
-                desc: "La Dama de las Catedrales.",
-                details: "Visita perfecta para la tarde (por la mañana hay culto). Es inmensa y luminosa, ideal para bajar la comida caminando a cubierto. Abre a turismo sobre las 13:00, así que a las 16:00 está perfecta.",
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Catedral+de+Segovia"
+                time: "16:30",
+                title: "Mirador San Marcos",
+                icon: "landscape",
+                desc: "Post-comida con vistas al Alcázar.",
+                details: "Si el tiempo acompaña, bajamos a la pradera de San Marcos para ver el Alcázar desde abajo. Plan opcional dependiendo de lluvia y ganas.",
+                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Mirador+de+la+Pradera+de+San+Marcos+Segovia"
             },
             {
                 time: "17:30",
@@ -408,62 +438,11 @@
             }
         ];
 
-        const restaurantData = {
-            almuzara: {
-                label: "La Almuzara",
-                badge: "PRINCIPAL",
-                price: "$$",
-                rating: "4.7",
-                distance: "10 min",
-                desc: "<strong>Restaurante Principal - Calle Marqués del Arco, 3</strong><br><strong>Lo mejor:</strong> Auténtica cocina tradicional castellana en pleno centro histórico de Segovia. Especialistas en asados y platos de cuchara típicos segovianos. Ambiente acogedor y familiar, perfecto para grupos. Excelente relación calidad-precio con productos de la tierra.",
-                shortDesc: "Cocina tradicional castellana • Platos de cuchara • Menús especiales",
-                scores: [5, 4, 5, 5], // Calidad, Ambiente, Precio, Ubicación
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=La+Almuzara+Calle+Marques+del+Arco+3+Segovia",
-                menuUrl: "https://www.google.com/search?q=La+Almuzara+Segovia+menu"
-            },
-            josemaria: {
-                label: "José María",
-                badge: "",
-                price: "$$$",
-                rating: "4.8",
-                distance: "5 min",
-                desc: "<strong>Famoso por su cochinillo</strong><br>Restaurante icónico de Segovia, conocido en toda España por su excepcional cochinillo asado. Alta demanda, ambiente animado y servicio profesional. Ideal para una experiencia gastronómica auténtica en el corazón de la ciudad.",
-                shortDesc: "Famoso cochinillo • Alta demanda • Ambiente animado",
-                scores: [5, 5, 3, 5],
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jose+Maria+Segovia",
-                menuUrl: "https://www.google.com/search?q=Jose+Maria+Segovia+menu"
-            },
-            casares: {
-                label: "Restaurante Casares",
-                badge: "",
-                price: "$$",
-                rating: "4.5",
-                distance: "3 min",
-                desc: "<strong>Vistas al Acueducto</strong><br>Ubicación privilegiada junto al Acueducto con menú vegetariano explícito. Ideal para grupos mixtos donde se quiere asegurar opciones para todos. Buena relación calidad-precio con vistas espectaculares.",
-                shortDesc: "Junto al Acueducto • Menú Vegetariano específico",
-                scores: [4, 5, 4, 5],
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=Restaurante+Casares+Segovia",
-                menuUrl: "https://www.restaurantecasares.com/carta/"
-            },
-            bernardino: {
-                label: "El Bernardino",
-                badge: "",
-                price: "$$",
-                rating: "4.5",
-                distance: "8 min",
-                desc: "<strong>Terraza con vistas</strong><br>Ambiente más relajado que otros restaurantes tradicionales, con una terraza excelente (aunque con lluvia no aplica). Cocina castellana de calidad a buen precio. Perfecto para quien busca algo más tranquilo.",
-                shortDesc: "Excelente terraza • Ambiente relajado • Buena relación calidad-precio",
-                scores: [4, 5, 4, 4],
-                mapsUrl: "https://www.google.com/maps/search/?api=1&query=El+Bernardino+Segovia",
-                menuUrl: "https://www.google.com/search?q=El+Bernardino+Segovia+menu"
-            }
-        };
-
         const checklistItems = [
-            "Reservar Restaurante (Prioridad Máxima)",
-            "Comprar entradas Alcázar (Turno 11:30/12:00)",
-            "Enviar ubicación Parking al grupo",
-            "Chequear paraguas y calzado cómodo"
+            "Enviar ubicación del parking elegido al grupo",
+            "Confirmar punto de quedada en el Acueducto",
+            "Chequear paraguas, abrigo por capas y calzado cómodo",
+            "Batería del móvil/cámara cargada para fotos"
         ];
 
         // --- Logic: Timeline ---
@@ -533,149 +512,6 @@
                 contentDiv.style.opacity = 1;
                 contentDiv.style.transition = 'opacity 0.3s ease';
             }, 200);
-        }
-
-        // --- Logic: Restaurants ---
-        let currentRestaurant = 'almuzara';
-        
-        function initRestaurants() {
-            const container = document.getElementById('restaurant-list');
-            
-            Object.keys(restaurantData).forEach((key, index) => {
-                const rest = restaurantData[key];
-                const isFirst = index === 0;
-                
-                const card = document.createElement('div');
-                card.className = `p-6 rounded-xl bg-white dark:bg-stone-900 shadow-sm cursor-pointer transition-all ${isFirst ? 'restaurant-card-selected' : 'restaurant-card-unselected'}`;
-                card.id = `rest-card-${key}`;
-                card.onclick = () => updateChart(key);
-                
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center gap-2">
-                            <h4 class="text-xl font-bold font-serif text-stone-900 dark:text-white">${rest.label}</h4>
-                            ${rest.badge ? `<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-bold">${rest.badge}</span>` : ''}
-                        </div>
-                        <span class="bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 px-2 py-0.5 rounded text-xs font-bold">${rest.price}</span>
-                    </div>
-                    <p class="text-sm text-stone-500 dark:text-stone-400 mb-3">${rest.shortDesc}</p>
-                    <div class="flex gap-4 text-xs font-medium text-stone-400">
-                        <span class="flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[14px]">star</span> ${rest.rating}
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[14px]">directions_walk</span> ${rest.distance}
-                        </span>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
-        
-        function updateChart(key) {
-            currentRestaurant = key;
-            const selection = restaurantData[key];
-            const detailDiv = document.getElementById('rest-detail');
-            
-            // Update card styles
-            Object.keys(restaurantData).forEach(k => {
-                const card = document.getElementById(`rest-card-${k}`);
-                if (k === key) {
-                    card.classList.remove('restaurant-card-unselected');
-                    card.classList.add('restaurant-card-selected');
-                } else {
-                    card.classList.remove('restaurant-card-selected');
-                    card.classList.add('restaurant-card-unselected');
-                }
-            });
-            
-            // Update Chart Data
-            myRadarChart.data.datasets[0].data = selection.scores;
-            myRadarChart.data.datasets[0].label = selection.label;
-            myRadarChart.update();
-
-            // Update Text with Links
-            detailDiv.innerHTML = `
-                <h5 class="text-sm font-bold text-stone-900 dark:text-white uppercase tracking-wider mb-2">Seleccionado: ${selection.label}</h5>
-                <p class="text-xs text-stone-500 dark:text-stone-400 max-w-xs mx-auto mb-4">${selection.desc}</p>
-                <div class="flex flex-wrap gap-2 justify-center">
-                    <a href="${selection.mapsUrl}" target="_blank" rel="noopener noreferrer" 
-                       class="inline-flex items-center px-3 py-1.5 bg-primary hover:bg-primary/90 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
-                        <span class="material-symbols-outlined text-sm mr-1.5">location_on</span>
-                        Ver Mapa
-                    </a>
-                    <a href="${selection.menuUrl}" target="_blank" rel="noopener noreferrer" 
-                       class="inline-flex items-center px-3 py-1.5 bg-stone-700 hover:bg-stone-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
-                        <span class="material-symbols-outlined text-sm mr-1.5">restaurant_menu</span>
-                        Ver Menú
-                    </a>
-                </div>
-            `;
-        }
-
-        // --- Logic: Chart.js ---
-        let myRadarChart;
-
-        function initChart() {
-            const ctx = document.getElementById('restaurantChart').getContext('2d');
-            
-            const data = {
-                labels: ['Calidad', 'Ambiente', 'Precio', 'Ubicación'],
-                datasets: [{
-                    label: 'Puntuación',
-                    data: restaurantData.almuzara.scores,
-                    fill: true,
-                    backgroundColor: 'rgba(23, 161, 78, 0.2)',
-                    borderColor: '#17a14e',
-                    pointBackgroundColor: '#17a14e',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#17a14e'
-                }]
-            };
-
-            const config = {
-                type: 'radar',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    elements: {
-                        line: { borderWidth: 3 }
-                    },
-                    scales: {
-                        r: {
-                            angleLines: { color: '#e5e7eb' },
-                            grid: { color: '#e5e7eb' },
-                            pointLabels: {
-                                font: { size: 11, family: "'Inter', sans-serif", weight: '600' },
-                                color: '#6b7280'
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 5,
-                            ticks: { 
-                                display: true,
-                                stepSize: 1,
-                                font: { size: 9 },
-                                color: '#9ca3af'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#1f2937',
-                            titleFont: { family: "'Inter', sans-serif", size: 13, weight: 'bold' },
-                            bodyFont: { family: "'Inter', sans-serif", size: 12 },
-                            padding: 12,
-                            cornerRadius: 8
-                        }
-                    }
-                }
-            };
-
-            myRadarChart = new Chart(ctx, config);
         }
 
         // --- Logic: Checklist ---
@@ -805,12 +641,7 @@
         // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
             initTimeline();
-            initRestaurants();
-            initChart();
             initChecklist();
-            
-            // Initialize first restaurant view
-            updateChart('almuzara');
         });
 
     </script>
